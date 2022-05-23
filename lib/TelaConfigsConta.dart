@@ -49,7 +49,7 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
                   labelText: 'Seu email',
                   enabled: editing,
                   border: OutlineInputBorder(),
-                ),
+                ), //
 
               ),
               IconButton(
