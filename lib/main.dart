@@ -1,7 +1,43 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart'
-    show AppBar, BuildContext, ButtonStyle, Center, CircularProgressIndicator, Color, Colors, Column, Container, ElevatedButton, FloatingActionButton, Icon, Icons, InputBorder, InputDecoration, Key, MainAxisAlignment, MaterialApp, MaterialPageRoute, MaterialStateProperty, Navigator, OutlineInputBorder, RaisedButton, Scaffold, State, StatefulWidget, StatelessWidget, Text, TextButton, TextEditingController, TextField, Theme, ThemeData, Widget, Wrap, runApp;
+    show
+        AppBar,
+        BuildContext,
+        ButtonStyle,
+        Center,
+        CircularProgressIndicator,
+        Color,
+        Colors,
+        Column,
+        Container,
+        ElevatedButton,
+        FloatingActionButton,
+        Icon,
+        Icons,
+        InputBorder,
+        InputDecoration,
+        Key,
+        MainAxisAlignment,
+        MaterialApp,
+        MaterialPageRoute,
+        MaterialStateProperty,
+        Navigator,
+        OutlineInputBorder,
+        RaisedButton,
+        Scaffold,
+        State,
+        StatefulWidget,
+        StatelessWidget,
+        Text,
+        TextButton,
+        TextEditingController,
+        TextField,
+        Theme,
+        ThemeData,
+        Widget,
+        Wrap,
+        runApp;
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hello_world/TelaLogin.dart';
@@ -9,8 +45,14 @@ import 'package:http/http.dart' as http;
 import 'package:hello_world/models/Romance.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -85,15 +127,15 @@ class _MyHomePageState extends State<MyHomePage> {
   String resultadoMatch = "";
 
   Future<Romance> darMatch(String p1, String p2) async {
-    const Map<String, String>  headers = {
+    const Map<String, String> headers = {
       'Connection': 'keep-alive',
       'sec-ch-ua':
-      '" Not A;Brand";v="99", "Chromium";v="99", "Opera GX";v="85"',
+          '" Not A;Brand";v="99", "Chromium";v="99", "Opera GX";v="85"',
       'Pragma': 'no-cache',
       'x-rapidapi-key': '94f454f271mshf275648a95e2a8dp1e6250jsnce28684e324a',
       'sec-ch-ua-mobile': '?0',
       'User-Agent':
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36 OPR/85.0.4341.72',
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36 OPR/85.0.4341.72',
       'x-rapidapi-ua': 'RapidAPI-Playground',
       'x-rapidapi-host': 'love-calculator.p.rapidapi.com',
       'Accept': 'application/json, text/plain, */*',
@@ -128,6 +170,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void handleClickDarMatch() async {
+    DatabaseReference testRef =
+        FirebaseDatabase.instance.reference().child("test");
+    testRef.set({"usuario": "aquiles"});
+
     Romance resp = await darMatch(nome1.text, nome2.text);
     setState(() {
       resultadoMatch = resp.result;
@@ -223,25 +269,25 @@ class SegundaRota extends StatelessWidget {
       ),
       body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Retornar !'),
-              ),
-              ElevatedButton(
-                child: Text('Terceira rota(tela)'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TerceiraRota()),
-                  );
-                },
-              ),
-            ],
-          )),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Retornar !'),
+          ),
+          ElevatedButton(
+            child: Text('Terceira rota(tela)'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TerceiraRota()),
+              );
+            },
+          ),
+        ],
+      )),
     );
   }
 }
@@ -255,16 +301,16 @@ class TerceiraRota extends StatelessWidget {
       ),
       body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Retornar !'),
-              ),
-            ],
-          )),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Retornar !'),
+          ),
+        ],
+      )),
     );
   }
 }
