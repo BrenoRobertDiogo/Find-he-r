@@ -10,57 +10,85 @@ class TelaConfigsConta extends StatefulWidget {
 }
 
 class _TelaConfigsContaState extends State<TelaConfigsConta> {
+  bool editing = false;
+
+  void modoEditar() {
+    setState(() {
+      editing = !editing;
+    });
+  }
+
+  void salvarAlteracoes() {
+    setState(() {
+      editing = !editing;
+    });
+  }
+
+  void cancelarAlteracoes() {
+    setState(() {
+      editing = !editing;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool editing = true;
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Sua conta"),
         actions: [
           IconButton(
-            onPressed: () {
-              setState(() {
-                editing = !editing;
-              });
-            },
-            icon: Icon( (editing == false) ? Icons.edit : Icons.save, size: 60),
+            onPressed: !editing ? modoEditar : null,
+            icon: Icon((!editing) ? Icons.edit : null),
           )
         ],
         centerTitle: true,
       ),
       body: Center(
-
         child: Container(
           child: Column(
             children: [
-              TextField(
-                // controller: Text,
-                decoration: InputDecoration(
-                  labelText: 'Seu nome',
-                  enabled: editing,
-                  border: OutlineInputBorder(),
+              const SizedBox(
+                height: 30,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.3,
+                child: TextField(
+                  // controller: Text,
+                  decoration: InputDecoration(
+                    labelText: 'Seu nome',
+                    enabled: editing,
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-
               ),
-              TextField(
-                // controller: Text,
-                decoration: InputDecoration(
-                  labelText: 'Seu email',
-                  enabled: editing,
-                  border: OutlineInputBorder(),
-                ), //
-
+              const SizedBox(
+                height: 16,
               ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    editing = !editing;
-                  });
-                },
-                icon: Icon( (editing == false) ? Icons.edit : Icons.save, size: 60),
-              )
-
+              Container(
+                width: MediaQuery.of(context).size.width * 0.3,
+                child: TextField(
+                  // controller: Text,
+                  decoration: InputDecoration(
+                    labelText: 'Seu email',
+                    enabled: editing,
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              if (editing)
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  IconButton(
+                    onPressed: cancelarAlteracoes,
+                    icon: const Icon(Icons.cancel_outlined),
+                  ),
+                  IconButton(
+                    onPressed: salvarAlteracoes,
+                    icon: const Icon(Icons.save),
+                  )
+                ]),
             ],
           ),
         ),
