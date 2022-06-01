@@ -1,47 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart'
-    show
-    AppBar,
-    BuildContext,
-    ButtonStyle,
-    Center,
-    Color,
-    Colors,
-    Column,
-    Container,
-    ElevatedButton,
-    FloatingActionButton,
-    Icon,
-    Icons,
-    InputBorder,
-    InputDecoration,
-    Key,
-    MainAxisAlignment,
-    MaterialApp,
-    MaterialPageRoute,
-    MaterialStateProperty,
-    Navigator,
-    OutlineInputBorder,
-    RaisedButton,
-    Scaffold,
-    State,
-    StatefulWidget,
-    StatelessWidget,
-    Text,
-    TextButton,
-    TextEditingController,
-    TextField,
-    Theme,
-    ThemeData,
-    Widget,
-    Wrap,
-    runApp;
+    show AppBar, BuildContext, ButtonStyle, Center, CircularProgressIndicator, Color, Colors, Column, Container, ElevatedButton, FloatingActionButton, Icon, Icons, InputBorder, InputDecoration, Key, MainAxisAlignment, MaterialApp, MaterialPageRoute, MaterialStateProperty, Navigator, OutlineInputBorder, RaisedButton, Scaffold, State, StatefulWidget, StatelessWidget, Text, TextButton, TextEditingController, TextField, Theme, ThemeData, Widget, Wrap, runApp;
 import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hello_world/TelaLogin.dart';
 import 'package:http/http.dart' as http;
-import 'Romance.dart';
+import 'package:hello_world/models/Romance.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.pink,
+        primarySwatch: Colors.lightGreen,
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
       home: const TelaLogin(title: 'Tela de Login'),
@@ -64,6 +31,45 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/*
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  final Future<FirebaseApp> _app = Firebase.initializeApp();
+  // const MyApp({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.lightGreen,
+      ),
+      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: FutureBuilder(
+        future: _app,
+        builder: (context, snapshot) {
+          if(snapshot.hasError) {
+            print('Deu erro ${snapshot.error}');
+            return Text('Deu erro');
+          } else if(snapshot.hasData){
+              return const TelaLogin(title: 'Tela de Login');
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      )
+      // const TelaLogin(title: 'Tela de Login'),
+    );
+  }
+}
+*/
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;

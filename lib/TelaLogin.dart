@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_world/TelaCadastro.dart';
 
 import 'TelaEncontros.dart';
 class TelaLogin extends StatefulWidget {
@@ -16,7 +17,7 @@ class _TelaLoginState extends State<TelaLogin> {
   @override
   Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(title: Text("Findher")),
+    // appBar: AppBar(title: Text("Findher")),
     body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -33,6 +34,7 @@ class _TelaLoginState extends State<TelaLogin> {
               ),
             ),
           ),
+          const SizedBox(height: 16,),
           Container(
             width: 400,
             child: TextField(
@@ -47,16 +49,29 @@ class _TelaLoginState extends State<TelaLogin> {
 
             ),
           ),
+          const SizedBox(height: 16,),
           ElevatedButton(
-            child: Text('Logar'),
+            child: const Text('Logar'),
             style:  ElevatedButton.styleFrom(fixedSize: Size(400, 50)),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TelaEncontros(title: '',)),
+                MaterialPageRoute(builder: (context) => const TelaEncontros(title: '',)),
               );
             },
           ),
+          const SizedBox(height: 16,),
+          OutlinedButton(
+            child: const Text('Cadastrar'),
+            style:  ElevatedButton.styleFrom(fixedSize: const Size(400, 50)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TelaCadastro(title: '',)),
+              );
+            },
+          ),
+
         ],
       ),
     ),
