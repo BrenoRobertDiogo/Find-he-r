@@ -1,16 +1,16 @@
-# hello_world
+# Find Her
 
-A new Flutter project.
+Find Her é um projeto de Aplicativos Mobile da faculdade, ele é um aplicativo de relacionamento como tinder ou badoo,
+que utiliza da distância euclidiana e de uma api de relação entre nomes para fazer a relação entre duas pessoas.
 
-## Getting Started
+## 🛠️ Construído com
 
-This project is a starting point for a Flutter application.
+* [DART](https://dart.dev/) - Linguagem
+* [Flutter](https://flutter.dev/) - Framework
+* [Firebase](https://firebase.google.com/) - Banco de dados
 
-A few resources to get you started if this is your first Flutter project:
+## ✒️ Autores
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* **Aquiles Aguiar** - *Backend e Frontend* - [Aquiles Aguiar](https://github.com/linkParaPerfil)
+* **Breno Robert** - *Backend e Frontend* - [Breno Robert](https://github.com/BrenoRobertDiogo)
+* **Caio Roberto** - *Documentação e Backend* - [Caio Roberto](https://github.com/linkParaPerfil)
