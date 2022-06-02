@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class TelaConfigsConta extends StatefulWidget {
   const TelaConfigsConta({Key? key, required this.title}) : super(key: key);
@@ -13,6 +14,9 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
   bool editing = false;
 
   void modoEditar() {
+    DatabaseReference testRef =
+        FirebaseDatabase.instance.reference().child("test");
+    testRef.set({"usuario": "KRAAAAAAAAAAAAA"});
     setState(() {
       editing = !editing;
     });
