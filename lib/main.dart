@@ -41,9 +41,9 @@ import 'package:flutter/material.dart'
         runApp;
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hello_world/TelaLogin.dart';
+import 'package:find_her/TelaLogin.dart';
 import 'package:http/http.dart' as http;
-import 'package:hello_world/models/Romance.dart';
+import 'package:find_her/models/Romance.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -64,11 +64,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Find Her',
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
       ),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: const MyHomePage(title: 'Find Her Home Page'),
       home: const TelaLogin(title: 'Tela de Login'),
     );
   }
@@ -88,11 +88,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Find Her',
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
       ),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: const MyHomePage(title: 'Find Her Home Page'),
       home: FutureBuilder(
         future: _app,
         builder: (context, snapshot) {
@@ -162,8 +162,9 @@ class _MyHomePageState extends State<MyHomePage> {
     var url = Uri.parse(
         'https://love-calculator.p.rapidapi.com/getPercentage?$query');
     var res = await http.get(url, headers: headers);
-    if (res.statusCode != 200)
+    if (res.statusCode != 200) {
       throw Exception('http.get error: statusCode= ${res.statusCode}');
+    }
     var decode = jsonDecode(res.body);
     print(res.body);
     return Romance(decode["fname"], decode["sname"], decode["percentage"],
@@ -173,6 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void handleClickDarMatch() async {
     Romance resp = await darMatch(nome1.text, nome2.text);
     DatabaseReference testRef =
+        // ignore: deprecated_member_use
         FirebaseDatabase.instance.reference().child("test");
     testRef.set({"usuario": "aquiles"});
     setState(() {
@@ -199,30 +201,32 @@ class _MyHomePageState extends State<MyHomePage> {
               percent: double.parse(romance.porcentagem) / 100,
               center: Text(
                 "${romance.porcentagem}%",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
               footer: Text(
                 romance.result,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 17.0),
               ),
               circularStrokeCap: CircularStrokeCap.round,
               progressColor: Colors.pink,
             ),
-            Container(
+            SizedBox(
               width: 400,
               child: TextField(
                 controller: nome1,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     icon: Icon(Icons.person),
                     hintText: 'Informe seu nome'),
               ),
             ),
-            Container(
+            SizedBox(
               width: 400,
               child: TextField(
                 controller: nome2,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     icon: Icon(Icons.person),
                     hintText: 'Informe o nome da outra pessoa'),
@@ -230,11 +234,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
 
             // Text(romance.result),
-            Container(
+            SizedBox(
               width: 400,
               child: ElevatedButton(
                 onPressed: handleClickDarMatch,
-                child: Wrap(children: [
+                child: Wrap(children: const [
                   Icon(
                     Icons.favorite,
                     color: Colors.white,
@@ -245,11 +249,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              child: Text('Abrir rota(tela)'),
+              child: const Text('Abrir rota(tela)'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SegundaRota()),
+                  MaterialPageRoute(builder: (context) => const SegundaRota()),
                 );
               },
             ),
@@ -261,11 +265,13 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class SegundaRota extends StatelessWidget {
+  const SegundaRota({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Segunda Rota (tela)"),
+        title: const Text("Segunda Rota (tela)"),
       ),
       body: Center(
           child: Column(
@@ -275,14 +281,14 @@ class SegundaRota extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('Retornar !'),
+            child: const Text('Retornar !'),
           ),
           ElevatedButton(
-            child: Text('Terceira rota(tela)'),
+            child: const Text('Terceira rota(tela)'),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TerceiraRota()),
+                MaterialPageRoute(builder: (context) => const TerceiraRota()),
               );
             },
           ),
@@ -293,11 +299,13 @@ class SegundaRota extends StatelessWidget {
 }
 
 class TerceiraRota extends StatelessWidget {
+  const TerceiraRota({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Terceira (tela)"),
+        title: const Text("Terceira (tela)"),
       ),
       body: Center(
           child: Column(
@@ -307,7 +315,7 @@ class TerceiraRota extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('Retornar !'),
+            child: const Text('Retornar !'),
           ),
         ],
       )),

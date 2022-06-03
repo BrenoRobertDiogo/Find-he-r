@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(hello_world LANGUAGES CXX)
+project(find_her LANGUAGES CXX)
 
-set(BINARY_NAME "hello_world")
+set(BINARY_NAME "find_her")
 
 cmake_policy(SET CMP0063 NEW)
 

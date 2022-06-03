@@ -16,7 +16,7 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
   void modoEditar() {
     DatabaseReference testRef =
         FirebaseDatabase.instance.reference().child("test");
-    testRef.set({"usuario": "KRAAAAAAAAAAAAA"});
+    testRef.set({"usuario": "kkkkkkkkkkkkkkkkkkk"});
     setState(() {
       editing = !editing;
     });
@@ -38,7 +38,7 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sua conta"),
+        title: const Text("Sua conta"),
         actions: [
           IconButton(
             onPressed: !editing ? modoEditar : null,
@@ -48,53 +48,51 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
         centerTitle: true,
       ),
       body: Center(
-        child: Container(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.3,
-                child: TextField(
-                  // controller: Text,
-                  decoration: InputDecoration(
-                    labelText: 'Seu nome',
-                    enabled: editing,
-                    border: OutlineInputBorder(),
-                  ),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: TextField(
+                // controller: Text,
+                decoration: InputDecoration(
+                  labelText: 'Seu nome',
+                  enabled: editing,
+                  border: const OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.3,
-                child: TextField(
-                  // controller: Text,
-                  decoration: InputDecoration(
-                    labelText: 'Seu email',
-                    enabled: editing,
-                    border: const OutlineInputBorder(),
-                  ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: TextField(
+                // controller: Text,
+                decoration: InputDecoration(
+                  labelText: 'Seu email',
+                  enabled: editing,
+                  border: const OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
-              if (editing)
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  IconButton(
-                    onPressed: cancelarAlteracoes,
-                    icon: const Icon(Icons.cancel_outlined),
-                  ),
-                  IconButton(
-                    onPressed: salvarAlteracoes,
-                    icon: const Icon(Icons.save),
-                  )
-                ]),
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            if (editing)
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                IconButton(
+                  onPressed: cancelarAlteracoes,
+                  icon: const Icon(Icons.cancel_outlined),
+                ),
+                IconButton(
+                  onPressed: salvarAlteracoes,
+                  icon: const Icon(Icons.save),
+                )
+              ]),
+          ],
         ),
       ),
     );

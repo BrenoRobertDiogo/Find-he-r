@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/TelaConfigsConta.dart';
-import 'package:hello_world/models/Pessoa.dart';
+import 'package:find_her/TelaConfigsConta.dart';
+import 'package:find_her/models/Pessoa.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class TelaEncontros extends StatefulWidget {
@@ -60,7 +60,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Findher"),
+          title: const Text("Findher"),
           actions: [
             IconButton(
                 onPressed: () => {
@@ -79,58 +79,56 @@ class _TelaEncontrosState extends State<TelaEncontros> {
           ],
           centerTitle: true,
         ),
-        body: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    Text('${pessoaSelecionada.nome}',
-                        style: TextStyle(fontSize: 25)),
-                    SizedBox(
-                      child: Image(
-                          image: NetworkImage('${pessoaSelecionada.imagem}')),
-                      width: MediaQuery.of(context).size.width *
-                          0.6, // Pegando tamanho real da tela e transformando em porcentagem
-                      height: MediaQuery.of(context).size.height * 0.6,
-                    )
-                  ],
-                ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Column(
+                children: [
+                  Text('${pessoaSelecionada.nome}',
+                      style: const TextStyle(fontSize: 25)),
+                  SizedBox(
+                    child: Image(
+                        image: NetworkImage('${pessoaSelecionada.imagem}')),
+                    width: MediaQuery.of(context).size.width *
+                        0.6, // Pegando tamanho real da tela e transformando em porcentagem
+                    height: MediaQuery.of(context).size.height * 0.6,
+                  )
+                ],
               ),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.green,
-                        onPrimary: Colors.white,
-                        shadowColor: Colors.greenAccent,
-                        elevation: 3,
-                        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
-                      ),
-                      child: Text('Gostei'),
-                      // style:  ElevatedButton.styleFrom(fixedSize: Size(MediaQuery.of(context).size.width * 0.5, 50)),
-                      onPressed: mudaPessoa,
+            ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      onPrimary: Colors.white,
+                      shadowColor: Colors.greenAccent,
+                      elevation: 3,
+                      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.red,
-                        onPrimary: Colors.white,
-                        shadowColor: Colors.redAccent,
-                        elevation: 3,
-                        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
-                      ),
-                      child: Text('Não gostei'),
-                      // style:  ElevatedButton.styleFrom(fixedSize: Size(MediaQuery.of(context).size.width * 0.5, 50)),
-                      onPressed: mudaPessoa,
+                    child: const Text('Gostei'),
+                    // style:  ElevatedButton.styleFrom(fixedSize: Size(MediaQuery.of(context).size.width * 0.5, 50)),
+                    onPressed: mudaPessoa,
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                      onPrimary: Colors.white,
+                      shadowColor: Colors.redAccent,
+                      elevation: 3,
+                      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                    child: const Text('Não gostei'),
+                    // style:  ElevatedButton.styleFrom(fixedSize: Size(MediaQuery.of(context).size.width * 0.5, 50)),
+                    onPressed: mudaPessoa,
+                  ),
+                ],
+              ),
+            )
+          ],
         ));
   }
 }

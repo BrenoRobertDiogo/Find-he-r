@@ -17,36 +17,35 @@ class _TelaCadastroState extends State<TelaCadastro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(title: Text("")),
+      appBar: AppBar(title: const Text("Cadastro")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
+          children: const [
+            SizedBox(
               width: 400,
               child: TextField(
                 // controller: Text,
                 decoration: InputDecoration(
-                  labelText: 'Login',
-                  border: OutlineInputBorder(),
-                  // icon: Icon(Icons.person),
-                  // hintText: 'Informe seu nome'
-                ),
+                    labelText: 'Login',
+                    border: OutlineInputBorder(),
+                    icon: Icon(Icons.person),
+                    hintText: 'Informe seu login'),
               ),
             ),
-            const SizedBox(height: 16,),
-            Container(
+            SizedBox(
+              height: 16,
+            ),
+            SizedBox(
               width: 400,
               child: TextField(
                 // controller: Text,
                 obscureText: true,
                 decoration: InputDecoration(
-                  labelText: 'Senha',
-                  border: OutlineInputBorder(),
-                  icon: Icon(Icons.lock),
-                  // hintText: 'Informe sua senha'
-                ),
-
+                    labelText: 'Senha',
+                    border: OutlineInputBorder(),
+                    icon: Icon(Icons.lock),
+                    hintText: 'Informe sua senha'),
               ),
             ),
           ],
