@@ -1,5 +1,6 @@
 export 'TelaCadastro.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'TelaLogin.dart';
@@ -25,10 +26,16 @@ class _TelaCadastroState extends State<TelaCadastro> {
   void salvaPessoa() {
     var senhaCript = sha512.convert(utf8.encode(senha.text)).toString();
     var idUsuario = uuid.v1();
-    DatabaseReference ref = FirebaseDatabase.instance.ref("users");
-    DatabaseReference novoUsuario = ref.push();
-    novoUsuario
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(idUsuario)
         .set({"id": idUsuario, "login": login.text, "senha": senhaCript});
+    // Other jeito
+    // DatabaseReference ref = FirebaseDatabase.instance.ref("users");
+    // DatabaseReference novoUsuario = ref.push();
+    // novoUsuario
+    //     .set({"id": idUsuario, "login": login.text, "senha": senhaCript});
   }
 
   @override
