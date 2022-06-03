@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'TelaLogin.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:uuid/uuid.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({Key? key, required this.title}) : super(key: key);
@@ -20,13 +22,13 @@ class _TelaCadastroState extends State<TelaCadastro> {
 
   var uuid = const Uuid();
 
-  // Generate a v1 (time-based) id
-
   void salvaPessoa() {
+    var senhaCript = sha512.convert(utf8.encode(senha.text)).toString();
     var idUsuario = uuid.v1();
-    DatabaseReference novoUsuario =
-        FirebaseDatabase.instance.reference().child(idUsuario);
-    novoUsuario.set({"login": login.text, "senha": senha.text});
+    DatabaseReference ref = FirebaseDatabase.instance.ref("users");
+    DatabaseReference novoUsuario = ref.push();
+    novoUsuario
+        .set({"id": idUsuario, "login": login.text, "senha": senhaCript});
   }
 
   @override
