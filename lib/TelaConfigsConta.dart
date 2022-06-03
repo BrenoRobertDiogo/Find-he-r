@@ -14,9 +14,6 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
   bool editing = false;
 
   void modoEditar() {
-    DatabaseReference testRef =
-        FirebaseDatabase.instance.reference().child("test");
-    testRef.set({"usuario": "kkkkkkkkkkkkkkkkkkk"});
     setState(() {
       editing = !editing;
     });
