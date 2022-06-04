@@ -14,29 +14,50 @@ class TelaLogin extends StatefulWidget {
   State<TelaLogin> createState() => _TelaLoginState();
 }
 
-class User {
-  final String login;
-  final String senha;
-
-  User(this.login, this.senha);
-}
-
 class _TelaLoginState extends State<TelaLogin> {
   final login = TextEditingController();
   final senha = TextEditingController();
 
-  Future<void> logar() async {
+  logar() async {
     var senhaCript = sha512.convert(utf8.encode(senha.text)).toString();
     var users = await FirebaseFirestore.instance.collection('users').get();
 
-    users.docs.first.data().keys.forEach((x) => print(x));
-    users.docs.forEach((x) => {print(x.data().keys)});
+    for (var user in users.docs) {
+      if (login.text == user.data()["login"] &&
+          senhaCript == user.data()["senha"]) {
+        return Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const TelaEncontros(title: "")),
+        );
+      }
+    }
+    return _exibirDialogo();
   }
 
-  List<Widget> printLogin(AsyncSnapshot snapshot) {
-    return snapshot.data.documents.map<Widget>((document) {
-      print(document.get('login'));
-    });
+  void _exibirDialogo() {
+    // Limpa caixa de texto
+    login.clear();
+    senha.clear();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Login error"),
+          content:
+              const Text("Login ou senha estão errados, tente novamente !"),
+          actions: <Widget>[
+            // define os botões na base do dialogo
+            ElevatedButton(
+              child: const Text("Fechar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -50,6 +71,7 @@ class _TelaLoginState extends State<TelaLogin> {
             SizedBox(
               width: 400,
               child: TextField(
+                autofocus: true,
                 controller: login,
                 decoration: const InputDecoration(
                   labelText: 'Login',
