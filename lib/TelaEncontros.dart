@@ -18,27 +18,32 @@ class _TelaEncontrosState extends State<TelaEncontros> {
   List<Pessoa> pessoas = [
     Pessoa(
         "Nicolas Cage",
+        '123',
         "H",
         "https://p2.trrsf.com/image/fget/cf/648/0/images.terra.com/2022/01/07/1837881277-willyswonderland-nicolas-cage.jpg",
         40),
     Pessoa(
         "Leonardo Di Caprio",
+        '123',
         "H",
         "https://entertainment.time.com/wp-content/uploads/sites/3/2012/04/leonardo-dicaprio-now.jpg?w=260",
         40),
     Pessoa(
         "Guilherme Briggs",
+        '123',
         "H",
         "https://upload.wikimedia.org/wikipedia/commons/7/71/GuilhermeBriggs.jpg",
         40),
     Pessoa(
         "Will Smith",
+        '123',
         "H",
         "https://s2.glbimg.com/aQu7dyXnWhTmZ74IZ_jJKW5L78w=/600x400/smart/e.glbimg.com/og/ed/f/original/2022/03/28/will-smith-oscat.jpg",
         40)
   ];
   Pessoa pessoaSelecionada = Pessoa(
       "John Wick",
+      '123',
       "H",
       "https://p2.trrsf.com/image/fget/cf/648/0/images.terra.com/2022/01/07/1837881277-willyswonderland-nicolas-cage.jpg",
       40);

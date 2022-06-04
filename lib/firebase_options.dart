@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,19 +46,32 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAX9qi6bZp1Z5S-_aDBkNKbWUfzmdXNJ9Y',
-    appId: '1:844935327393:android:003f1287c4e26ac20e8ae0',
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAMLw3J9--TNFPWqK2yCh_hTJEHrev-__s',
+    appId: '1:844935327393:web:cdf8378f8cb4fa580e8ae0',
     messagingSenderId: '844935327393',
     projectId: 'find-her-65a18',
+    authDomain: 'find-her-65a18.firebaseapp.com',
+    databaseURL: 'https://find-her-65a18-default-rtdb.firebaseio.com',
+    storageBucket: 'find-her-65a18.appspot.com',
+    measurementId: 'G-8YF2FW9D5W',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyAX9qi6bZp1Z5S-_aDBkNKbWUfzmdXNJ9Y',
+    appId: '1:844935327393:android:aacf2f912f7b4c4c0e8ae0',
+    messagingSenderId: '844935327393',
+    projectId: 'find-her-65a18',
+    databaseURL: 'https://find-her-65a18-default-rtdb.firebaseio.com',
     storageBucket: 'find-her-65a18.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAsiIUQCDxVSHq35PUgtMGlFziA8UgytuM',
-    appId: '1:844935327393:ios:a4d93a0a90a8d5670e8ae0',
+    appId: '1:844935327393:ios:02065214fc2bbda30e8ae0',
     messagingSenderId: '844935327393',
     projectId: 'find-her-65a18',
+    databaseURL: 'https://find-her-65a18-default-rtdb.firebaseio.com',
     storageBucket: 'find-her-65a18.appspot.com',
     iosClientId: '844935327393-f4fc5enkb28i9382skbeql9drth19978.apps.googleusercontent.com',
     iosBundleId: 'com.example.helloWorld',

@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "844935327393",
+    "firebase_url": "https://find-her-65a18-default-rtdb.firebaseio.com",
     "project_id": "find-her-65a18",
     "storage_bucket": "find-her-65a18.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:844935327393:android:003f1287c4e26ac20e8ae0",
+        "mobilesdk_app_id": "1:844935327393:android:aacf2f912f7b4c4c0e8ae0",
         "android_client_info": {
           "package_name": "com.example.find_her"
         }
@@ -29,6 +30,49 @@
             {
               "client_id": "844935327393-urahbfuk89muf2630e1obpu75ei1c4dr.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "844935327393-f4fc5enkb28i9382skbeql9drth19978.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.helloWorld"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844935327393:android:003f1287c4e26ac20e8ae0",
+        "android_client_info": {
+          "package_name": "com.example.hello_world"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "844935327393-urahbfuk89muf2630e1obpu75ei1c4dr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX9qi6bZp1Z5S-_aDBkNKbWUfzmdXNJ9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "844935327393-urahbfuk89muf2630e1obpu75ei1c4dr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "844935327393-f4fc5enkb28i9382skbeql9drth19978.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.helloWorld"
+              }
             }
           ]
         }

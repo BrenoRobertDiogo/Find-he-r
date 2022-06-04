@@ -1,9 +1,12 @@
+import 'package:find_her/Operations.dart';
+import 'package:find_her/models/Pessoa.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:find_her/TelaCadastro.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
 
 import 'TelaEncontros.dart';
 
@@ -20,19 +23,28 @@ class _TelaLoginState extends State<TelaLogin> {
 
   logar() async {
     var senhaCript = sha512.convert(utf8.encode(senha.text)).toString();
-    var users = await FirebaseFirestore.instance.collection('users').get();
-
+    // QuerySnapshot users = Operations.getData('users').get();// FirebaseFirestore.instance.collection('users').get();
+    var compara = await Operations.getData('users').where('login', isEqualTo: login.text).where('senha', isEqualTo: senhaCript).get();
+    print(compara);
+    if(compara.docs.isEmpty) {
+      return _exibirDialogo();
+    }
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => const TelaEncontros(title: "")),
+    );/*
     for (var user in users.docs) {
-      if (login.text == user.data()["login"] &&
-          senhaCript == user.data()["senha"]) {
+      Map<String, dynamic>? userAtual = user.data() as Map<String, dynamic>?;
+      if (login.text == userAtual!["login"] &&
+          senhaCript == userAtual!["senha"]) {
         return Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => const TelaEncontros(title: "")),
         );
       }
-    }
-    return _exibirDialogo();
+    }*/
   }
 
   void _exibirDialogo() {
