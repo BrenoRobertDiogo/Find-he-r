@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:find_her/TelaConfigsConta.dart';
 import 'package:find_her/models/Pessoa.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:localstore/localstore.dart';
 
 class TelaEncontros extends StatefulWidget {
   const TelaEncontros({Key? key, required this.title}) : super(key: key);

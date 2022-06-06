@@ -49,11 +49,11 @@ class _TelaCadastroState extends State<TelaCadastro> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               width: 400,
               child: TextField(
                 // controller: login,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                     labelText: 'Digite seu nome',
                     border: OutlineInputBorder(),
                     icon: Icon(Icons.pending_actions),
@@ -161,19 +161,16 @@ class _TelaCadastroState extends State<TelaCadastro> {
               height: 16,
             ),
             DropdownButton<String>(
-                items: _valores.map((String dropDownStringItem) {
-                  return DropdownMenuItem<String>(
-                    value: dropDownStringItem,
-                    child: Text(dropDownStringItem),
-                  );
-                }).toList(),
-                onChanged: (String? x) => {
-                  if(x != null){
-                    setaM(x)
-                  }
-                },
+              items: _valores.map((String dropDownStringItem) {
+                return DropdownMenuItem<String>(
+                  value: dropDownStringItem,
+                  child: Text(dropDownStringItem),
+                );
+              }).toList(),
+              onChanged: (String? x) => {
+                if (x != null) {setaM(x)}
+              },
               value: sexoSelecionado,
-
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(fixedSize: const Size(400, 50)),
@@ -185,10 +182,9 @@ class _TelaCadastroState extends State<TelaCadastro> {
       ),
     );
   }
+
   void setaM(String x) {
-      print('entrou aqui');
-    setState(() => {
-      sexoSelecionado = x
-    });
+    print('entrou aqui');
+    setState(() => {sexoSelecionado = x});
   }
 }

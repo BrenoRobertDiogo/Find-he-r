@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:localstore/localstore.dart';
 
 class TelaConfigsConta extends StatefulWidget {
   const TelaConfigsConta({Key? key, required this.title}) : super(key: key);
@@ -11,7 +12,17 @@ class TelaConfigsConta extends StatefulWidget {
 }
 
 class _TelaConfigsContaState extends State<TelaConfigsConta> {
+  final login = TextEditingController();
+  final nome = TextEditingController();
+  Localstore loginUser = Localstore.instance;
+
   bool editing = false;
+
+  void getUser() async {
+    final dataUser = await loginUser.collection('users').doc("user").get();
+
+    print(dataUser);
+  }
 
   void modoEditar() {
     setState(() {
@@ -53,7 +64,7 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.3,
               child: TextField(
-                // controller: Text,
+                controller: nome,
                 decoration: InputDecoration(
                   labelText: 'Seu nome',
                   enabled: editing,
@@ -67,7 +78,7 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.3,
               child: TextField(
-                // controller: Text,
+                controller: login,
                 decoration: InputDecoration(
                   labelText: 'Seu email',
                   enabled: editing,
