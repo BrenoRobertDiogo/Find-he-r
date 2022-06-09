@@ -31,7 +31,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
       "id": idUsuario,
       "login": login.text,
       "senha": senhaCript,
-      "testando": {"Tag1": 5, "Tag2": 5, "Tag3": 5, "Tag4": 5, "Tag5": 5}
+      "interesses": {"Tag1": 5, "Tag2": 2, "Tag3": 3, "Tag4": 3, "Tag5": 4}
     });
     // Other jeito
     // DatabaseReference ref = FirebaseDatabase.instance.ref("users");
