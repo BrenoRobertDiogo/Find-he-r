@@ -11,6 +11,6 @@ que utiliza da distância euclidiana e de uma api de relação entre nomes para 
 
 ## ✒️ Autores
 
-* **Aquiles Aguiar** - *Backend e Frontend* - [Aquiles Aguiar](https://github.com/linkParaPerfil)
+* **Aquiles Aguiar** - *Backend e Frontend* - [Aquiles Aguiar](https://github.com/AquilesAguiar)
 * **Breno Robert** - *Backend e Frontend* - [Breno Robert](https://github.com/BrenoRobertDiogo)
-* **Caio Roberto** - *Documentação e Backend* - [Caio Roberto](https://github.com/linkParaPerfil)
+* **Caio Roberto** - *Documentação e Backend* - [Caio Roberto](https://github.com/CaioRS)
