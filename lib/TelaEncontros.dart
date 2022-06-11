@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:find_her/TelaHomeChat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:find_her/TelaConfigsConta.dart';
@@ -81,7 +81,18 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                 icon: Image.network(
                     "https://icones.pro/wp-content/uploads/2021/02/icone-utilisateur.png") // Icon.asset
 
-                )
+                ),
+            IconButton(
+                onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TelaHomeChat(
+                                  title: '',
+                                )),
+                      )
+                    },
+                icon: const Icon(Icons.chat))
           ],
           centerTitle: true,
         ),
