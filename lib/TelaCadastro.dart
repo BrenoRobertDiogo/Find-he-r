@@ -47,55 +47,44 @@ class _TelaCadastroState extends State<TelaCadastro> {
       "Tag4": jsonEncode(Tag("", 0).TagToSend()),
       "Tag5": jsonEncode(Tag("", 0).TagToSend())
     }
-
-
   };
 
-  void SalvarTag(){
+  void SalvarTag() {
     setState(() {
-      print(tagSelecionadaCampo.text + campoNotaAtual.text);
-      print(dadosCadastrar["interesses"]["Tag"+tagSelecionada.toString()]);
-      dadosCadastrar["interesses"]["Tag"+tagSelecionada.toString()] = jsonEncode(Tag(tagSelecionadaCampo.text, int.parse(campoNotaAtual.text)).TagToSend());
-
+      dadosCadastrar["interesses"]["Tag" + tagSelecionada.toString()] =
+          jsonEncode(
+              Tag(tagSelecionadaCampo.text, int.parse(campoNotaAtual.text))
+                  .TagToSend());
     });
-    print(tagSelecionada);
-    print(dadosCadastrar["interesses"]["Tag"+tagSelecionada.toString()]);
-
   }
 
   void salvaPessoa() {
-
     var senhaCript = sha512.convert(utf8.encode(senha.text)).toString();
     var idUsuario = uuid.v1();
-    dadosCadastrar["id"]    = idUsuario;
+    dadosCadastrar["id"] = idUsuario;
     dadosCadastrar["senha"] = senhaCript;
     dadosCadastrar["login"] = login.text;
-    dadosCadastrar["nome"]  = nomeC.text;
-    dadosCadastrar["sexo"]  = sexoSelecionado;
-    for (var element in [1,2,3,4,5]) {
-      if(dadosCadastrar["interesses"]["Tag"+element.toString()] == "{\"NomeTag\":\"\",\"Estrelas\":0}"){
-        dadosCadastrar["interesses"]["Tag"+element.toString()] = null;
+    dadosCadastrar["nome"] = nomeC.text;
+    dadosCadastrar["sexo"] = sexoSelecionado;
+    for (var element in [1, 2, 3, 4, 5]) {
+      if (dadosCadastrar["interesses"]["Tag" + element.toString()] ==
+          {"NomeTag": "", "Estrelas": 0}) {
+        dadosCadastrar["interesses"]["Tag" + element.toString()] = null;
       }
     }
-    FirebaseFirestore.instance.collection("users").doc(idUsuario).set(dadosCadastrar);
-
-    // Other jeito
-    // DatabaseReference ref = FirebaseDatabase.instance.ref("users");
-    // DatabaseReference novoUsuario = ref.push();
-    // novoUsuario
-    //     .set({"id": idUsuario, "login": login.text, "senha": senhaCript});
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(idUsuario)
+        .set(dadosCadastrar);
   }
 
-  void setTagSelecionada(int value){
+  void setTagSelecionada(int value) {
     setState(() {
       tagSelecionada = value;
-      print(dadosCadastrar["interesses"]["Tag"+tagSelecionada.toString()]);
-      var decodf = json.decode(dadosCadastrar["interesses"]["Tag"+tagSelecionada.toString()]);
-      notaAtual = decodf["QtdEstrelas"];
-      campoNotaAtual.text = decodf["QtdEstrelas"];
-      tagSelecionadaCampo.text = decodf["Nome"];
-
-
+      var decodf = json.decode(
+          dadosCadastrar["interesses"]["Tag" + tagSelecionada.toString()]);
+      campoNotaAtual.text = decodf["Estrelas"].toString();
+      tagSelecionadaCampo.text = decodf["NomeTag"];
     });
   }
 
@@ -151,27 +140,28 @@ class _TelaCadastroState extends State<TelaCadastro> {
             const SizedBox(
               height: 16,
             ),
-            Container(
+            SizedBox(
               // color: Color.fromRGBO(95, 175, 2, 0.7568627450980392),
               width: 400,
               height: 60,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [1,2,3,4,5].map((e) => Ink(
-                  decoration: const ShapeDecoration(
-                    color: Color.fromRGBO(95, 175, 2, 1.0),
-                    shape: CircleBorder(),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.star),
-                    color: Colors.white,
-                    onPressed: () {
-                      setTagSelecionada(e);
-                      modalTags();
-                    },
-                  ),
-                )).toList()
-              ),
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [1, 2, 3, 4, 5]
+                      .map((e) => Ink(
+                            decoration: const ShapeDecoration(
+                              color: Color.fromRGBO(95, 175, 2, 1.0),
+                              shape: CircleBorder(),
+                            ),
+                            child: IconButton(
+                              icon: const Icon(Icons.star),
+                              color: Colors.white,
+                              onPressed: () {
+                                setTagSelecionada(e);
+                                modalTags();
+                              },
+                            ),
+                          ))
+                      .toList()),
             ),
             const SizedBox(
               height: 16,
@@ -192,24 +182,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
               style: ElevatedButton.styleFrom(fixedSize: const Size(400, 50)),
               child: const Text('Cadastrar'),
               onPressed: salvaPessoa,
-            ),/*
-            Container(
-              height: 200,
-              color: Colors.amber,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Text('Modal BottomSheet'),
-                    ElevatedButton(
-                      child: const Text('Close BottomSheet'),
-                      onPressed: () => modalTags(),
-                    )
-                  ],
-                ),
-              ),
-            )*/
+            ),
           ],
         ),
       ),
@@ -217,13 +190,11 @@ class _TelaCadastroState extends State<TelaCadastro> {
   }
 
   void setaM(String x) {
-    print('entrou aqui');
     setState(() => {sexoSelecionado = x});
   }
 
   void modalTags() {
     void onChangeTag(String tag) {
-      print(tag);
       setState(() {
         tagSelecionadaCampo.text = tag;
       });
@@ -288,14 +259,12 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     return Flexible(
                         flex: 25,
                         child: ElevatedButton(
-
-                        onPressed: () => onChangeTag(e),
-                        child: Text(e),
-                        style: ElevatedButton.styleFrom(
-                            primary: e == tagSelecionada
-                                ? Colors.lightGreen
-                                : Colors.white54)))
-                      ;
+                            onPressed: () => onChangeTag(e),
+                            child: Text(e),
+                            style: ElevatedButton.styleFrom(
+                                primary: e == tagSelecionada
+                                    ? Colors.lightGreen
+                                    : Colors.white54)));
                   }).toList(),
                 ),
                 Padding(
@@ -304,21 +273,17 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     child: SizedBox(
                       width: 200,
                       height: 100,
-                      child:  ElevatedButton(
-                          child: Text("Salvar"),
+                      child: ElevatedButton(
+                          child: const Text("Salvar"),
                           onPressed: () => SalvarTag()),
-
                     ),
                   ),
-                )
-                ,
+                ),
               ],
             ),
           );
         });
   }
-
-
 
   void verificaNota(String nota) {
     if (int.parse(nota) > 10) {
