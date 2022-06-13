@@ -1,8 +1,10 @@
 export 'TelaCadastro.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_her/models/Tag.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uuid/uuid.dart';
 import 'package:crypto/crypto.dart';
@@ -18,21 +20,65 @@ class TelaCadastro extends StatefulWidget {
 
 class _TelaCadastroState extends State<TelaCadastro> {
   final login = TextEditingController();
+  final nomeC = TextEditingController();
   final senha = TextEditingController();
-  String sexoSelecionado = "Alfas";
+  final tagSelecionadaCampo = TextEditingController();
+  String sexoSelecionado = "Homem";
+  final campoNotaAtual = TextEditingController(text: "5");
+  List<String> StringsTags = [
+    "Televisão",
+    "Animais",
+    "Beber",
+    "Música",
+    "Viajar",
+    "Pintar",
+    "Cantar"
+  ];
+  int tagSelecionada = -1;
 
   var uuid = const Uuid();
+  String notaAtual = '5';
+
+  Map<String, dynamic> dadosCadastrar = {
+    "interesses": {
+      "Tag1": jsonEncode(Tag("", 0).TagToSend()),
+      "Tag2": jsonEncode(Tag("", 0).TagToSend()),
+      "Tag3": jsonEncode(Tag("", 0).TagToSend()),
+      "Tag4": jsonEncode(Tag("", 0).TagToSend()),
+      "Tag5": jsonEncode(Tag("", 0).TagToSend())
+    }
+
+
+  };
+
+  void SalvarTag(){
+    setState(() {
+      print(tagSelecionadaCampo.text + campoNotaAtual.text);
+      print(dadosCadastrar["interesses"]["Tag"+tagSelecionada.toString()]);
+      dadosCadastrar["interesses"]["Tag"+tagSelecionada.toString()] = jsonEncode(Tag(tagSelecionadaCampo.text, int.parse(campoNotaAtual.text)).TagToSend());
+
+    });
+    print(tagSelecionada);
+    print(dadosCadastrar["interesses"]["Tag"+tagSelecionada.toString()]);
+
+  }
 
   void salvaPessoa() {
+
     var senhaCript = sha512.convert(utf8.encode(senha.text)).toString();
     var idUsuario = uuid.v1();
+    dadosCadastrar["id"]    = idUsuario;
+    dadosCadastrar["senha"] = senhaCript;
+    dadosCadastrar["login"] = login.text;
+    dadosCadastrar["nome"]  = nomeC.text;
+    dadosCadastrar["sexo"]  = sexoSelecionado;
+    for (var element in [1,2,3,4,5]) {
+      if(dadosCadastrar["interesses"]["Tag"+element.toString()] == "{\"NomeTag\":\"\",\"Estrelas\":0}"){
+        dadosCadastrar["interesses"]["Tag"+element.toString()] = null;
+      }
+    }
+    FirebaseFirestore.instance.collection("users").doc(idUsuario).set(dadosCadastrar);
 
-    FirebaseFirestore.instance.collection("users").doc(idUsuario).set({
-      "id": idUsuario,
-      "login": login.text,
-      "senha": senhaCript,
-      "interesses": {"Tag1": 5, "Tag2": 2, "Tag3": 3, "Tag4": 3, "Tag5": 4}
-    });
     // Other jeito
     // DatabaseReference ref = FirebaseDatabase.instance.ref("users");
     // DatabaseReference novoUsuario = ref.push();
@@ -40,20 +86,33 @@ class _TelaCadastroState extends State<TelaCadastro> {
     //     .set({"id": idUsuario, "login": login.text, "senha": senhaCript});
   }
 
+  void setTagSelecionada(int value){
+    setState(() {
+      tagSelecionada = value;
+      print(dadosCadastrar["interesses"]["Tag"+tagSelecionada.toString()]);
+      var decodf = json.decode(dadosCadastrar["interesses"]["Tag"+tagSelecionada.toString()]);
+      notaAtual = decodf["QtdEstrelas"];
+      campoNotaAtual.text = decodf["QtdEstrelas"];
+      tagSelecionadaCampo.text = decodf["Nome"];
+
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<String> _valores = ['Alfas', 'Betas', 'Resto'];
+    List<String> _valores = ['Homem', 'Mulher', 'Outros'];
     return Scaffold(
       appBar: AppBar(title: const Text("Cadastro")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
+            SizedBox(
               width: 400,
               child: TextField(
-                // controller: login,
-                decoration: InputDecoration(
+                controller: nomeC,
+                decoration: const InputDecoration(
                     labelText: 'Digite seu nome',
                     border: OutlineInputBorder(),
                     icon: Icon(Icons.pending_actions),
@@ -98,63 +157,20 @@ class _TelaCadastroState extends State<TelaCadastro> {
               height: 60,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Ink(
-                    decoration: const ShapeDecoration(
-                      color: Color.fromRGBO(95, 175, 2, 1.0),
-                      shape: CircleBorder(),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.star),
-                      color: Colors.white,
-                      onPressed: () {},
-                    ),
+                children: [1,2,3,4,5].map((e) => Ink(
+                  decoration: const ShapeDecoration(
+                    color: Color.fromRGBO(95, 175, 2, 1.0),
+                    shape: CircleBorder(),
                   ),
-                  Ink(
-                    decoration: const ShapeDecoration(
-                      color: Color.fromRGBO(95, 175, 2, 1.0),
-                      shape: CircleBorder(),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.star),
-                      color: Colors.white,
-                      onPressed: () {},
-                    ),
+                  child: IconButton(
+                    icon: const Icon(Icons.star),
+                    color: Colors.white,
+                    onPressed: () {
+                      setTagSelecionada(e);
+                      modalTags();
+                    },
                   ),
-                  Ink(
-                    decoration: const ShapeDecoration(
-                      color: Color.fromRGBO(95, 175, 2, 1.0),
-                      shape: CircleBorder(),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.star),
-                      color: Colors.white,
-                      onPressed: () {},
-                    ),
-                  ),
-                  Ink(
-                    decoration: const ShapeDecoration(
-                      color: Color.fromRGBO(95, 175, 2, 1.0),
-                      shape: CircleBorder(),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.star),
-                      color: Colors.white,
-                      onPressed: () {},
-                    ),
-                  ),
-                  Ink(
-                    decoration: const ShapeDecoration(
-                      color: Color.fromRGBO(95, 175, 2, 1.0),
-                      shape: CircleBorder(),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.star),
-                      color: Colors.white,
-                      onPressed: () {},
-                    ),
-                  ),
-                ],
+                )).toList()
               ),
             ),
             const SizedBox(
@@ -176,7 +192,24 @@ class _TelaCadastroState extends State<TelaCadastro> {
               style: ElevatedButton.styleFrom(fixedSize: const Size(400, 50)),
               child: const Text('Cadastrar'),
               onPressed: salvaPessoa,
-            ),
+            ),/*
+            Container(
+              height: 200,
+              color: Colors.amber,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text('Modal BottomSheet'),
+                    ElevatedButton(
+                      child: const Text('Close BottomSheet'),
+                      onPressed: () => modalTags(),
+                    )
+                  ],
+                ),
+              ),
+            )*/
           ],
         ),
       ),
@@ -186,5 +219,116 @@ class _TelaCadastroState extends State<TelaCadastro> {
   void setaM(String x) {
     print('entrou aqui');
     setState(() => {sexoSelecionado = x});
+  }
+
+  void modalTags() {
+    void onChangeTag(String tag) {
+      print(tag);
+      setState(() {
+        tagSelecionadaCampo.text = tag;
+      });
+    }
+
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            color: const Color.fromRGBO(255, 255, 255, 0.5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 32,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 40,
+                      width: 200,
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          enabled: false,
+                          labelText: 'Selecionado',
+                          border: OutlineInputBorder(),
+                          icon: Icon(Icons.thumb_up),
+                        ),
+                        controller: tagSelecionadaCampo,
+                        onChanged: (String a) => verificaNota(a),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 40,
+                      width: 200,
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'O quanto eu gosto',
+                          border: OutlineInputBorder(),
+                          icon: Icon(Icons.numbers),
+                          // hintText: 'Informe seu nome'
+                        ),
+                        controller: campoNotaAtual,
+                        onChanged: (String a) => verificaNota(a),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ], // Only numbers can be entered
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: StringsTags.map((e) {
+                    return Flexible(
+                        flex: 25,
+                        child: ElevatedButton(
+
+                        onPressed: () => onChangeTag(e),
+                        child: Text(e),
+                        style: ElevatedButton.styleFrom(
+                            primary: e == tagSelecionada
+                                ? Colors.lightGreen
+                                : Colors.white54)))
+                      ;
+                  }).toList(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Center(
+                    child: SizedBox(
+                      width: 200,
+                      height: 100,
+                      child:  ElevatedButton(
+                          child: Text("Salvar"),
+                          onPressed: () => SalvarTag()),
+
+                    ),
+                  ),
+                )
+                ,
+              ],
+            ),
+          );
+        });
+  }
+
+
+
+  void verificaNota(String nota) {
+    if (int.parse(nota) > 10) {
+      campoNotaAtual.text = "10";
+    } else if (int.parse(nota) < 0) {
+      campoNotaAtual.text = "0";
+    } else if (nota == "") {
+      campoNotaAtual.text = "0";
+    } else {
+      campoNotaAtual.text = int.parse(nota).toString();
+    }
   }
 }
