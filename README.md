@@ -8,6 +8,7 @@ que utiliza da distância euclidiana e de uma api de relação entre nomes para 
 * [DART](https://dart.dev/) - Linguagem
 * [Flutter](https://flutter.dev/) - Framework
 * [Firebase](https://firebase.google.com/) - Banco de dados
+* [Api de recomendação](https://github.com/AquilesAguiar/recomentacaoApi) - API
 
 ## ✒️ Autores
 
