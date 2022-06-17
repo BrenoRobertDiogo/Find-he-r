@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:uuid/uuid.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'package:find_her/TelaLogin.dart';
 
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({Key? key, required this.title}) : super(key: key);
@@ -58,7 +59,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
     });
   }
 
-  void salvaPessoa() {
+  salvaPessoa() {
     var senhaCript = sha512.convert(utf8.encode(senha.text)).toString();
     var idUsuario = uuid.v1();
     dadosCadastrar["id"] = idUsuario;
@@ -76,6 +77,11 @@ class _TelaCadastroState extends State<TelaCadastro> {
         .collection("users")
         .doc(idUsuario)
         .set(dadosCadastrar);
+
+    return Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TelaLogin(title: "")),
+    );
   }
 
   void setTagSelecionada(int value) {
