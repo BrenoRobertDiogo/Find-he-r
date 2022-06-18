@@ -2,43 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:flutter/material.dart'
-    show
-        AppBar,
-        BuildContext,
-        ButtonStyle,
-        Center,
-        CircularProgressIndicator,
-        Color,
-        Colors,
-        Column,
-        Container,
-        ElevatedButton,
-        FloatingActionButton,
-        Icon,
-        Icons,
-        InputBorder,
-        InputDecoration,
-        Key,
-        MainAxisAlignment,
-        MaterialApp,
-        MaterialPageRoute,
-        MaterialStateProperty,
-        Navigator,
-        OutlineInputBorder,
-        RaisedButton,
-        Scaffold,
-        State,
-        StatefulWidget,
-        StatelessWidget,
-        Text,
-        TextButton,
-        TextEditingController,
-        TextField,
-        Theme,
-        ThemeData,
-        Widget,
-        Wrap,
-        runApp;
+    show AppBar, BuildContext, ButtonStyle, Center, CircularProgressIndicator, Color, Colors, Column, Container, ElevatedButton, FloatingActionButton, Icon, Icons, InputBorder, InputDecoration, Key, MainAxisAlignment, MaterialApp, MaterialPageRoute, MaterialStateProperty, Navigator, OutlineInputBorder, RaisedButton, Scaffold, State, StatefulWidget, StatelessWidget, Text, TextButton, TextEditingController, TextField, Theme, ThemeData, VisualDensity, Widget, Wrap, runApp;
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:find_her/TelaLogin.dart';
@@ -67,6 +31,7 @@ class MyApp extends StatelessWidget {
       title: 'Find Her',
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // home: const MyHomePage(title: 'Find Her Home Page'),
       home: const TelaLogin(title: 'Tela de Login'),

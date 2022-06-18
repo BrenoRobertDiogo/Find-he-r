@@ -99,7 +99,9 @@ class _TelaHomeChatState extends State<TelaHomeChat> {
           ),
           IconButton(
             onPressed: () => abrirUrl("www.facebook.com", "VenomExtreme/"),
-            icon: const Icon(FontAwesomeIcons.facebook,
+            icon: const Icon(
+
+                FontAwesomeIcons.facebook,
                 color: Colors.blue, size: 20.0),
           ),
           IconButton(

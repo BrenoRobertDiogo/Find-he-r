@@ -1,15 +1,23 @@
 export 'TelaCadastro.dart';
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:find_her/models/Tag.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:find_her/TelaLogin.dart';
+
+import 'Operations.dart';
 
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({Key? key, required this.title}) : super(key: key);
@@ -23,9 +31,16 @@ class _TelaCadastroState extends State<TelaCadastro> {
   final login = TextEditingController();
   final nomeC = TextEditingController();
   final senha = TextEditingController();
+  final instagramID = TextEditingController();
+  final twitterID = TextEditingController();
+  final facebookID = TextEditingController();
+
+
   final tagSelecionadaCampo = TextEditingController();
   String sexoSelecionado = "Homem";
   final campoNotaAtual = TextEditingController(text: "5");
+  XFile? imagemPessoa = XFile('assets/imagemPadrao.png');
+  final ImagePicker _picker = ImagePicker();
   List<String> StringsTags = [
     "Televisão",
     "Animais",
@@ -50,6 +65,32 @@ class _TelaCadastroState extends State<TelaCadastro> {
     }
   };
 
+
+  Future selectFile() async {
+    /*
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      // type: FileType.custom,
+      // allowedExtensions: ['jpg'],
+    );*/
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image == null) return;
+    setState(() {
+      imagemPessoa = image;
+    });
+  }
+
+  Future uploadFile(String login) async {
+    FirebaseStorage store = FirebaseStorage.instance;
+    TaskSnapshot task = await store.ref('$login/img.${imagemPessoa!.name.split('.').last}').putData(await imagemPessoa!.readAsBytes());
+    /*
+    final path = 'pessoas/'+login;
+    final file = File(imagemPessoa!.path);
+    final ref = FirebaseStorage.instance.ref().child(path);
+    UploadTask uploadTask = ref.putFile(imagemPessoa!.readAsBytes());
+    final snapshot = await uploadTask.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();*/
+  }
+
   void SalvarTag() {
     setState(() {
       dadosCadastrar["interesses"]["Tag" + tagSelecionada.toString()] =
@@ -62,6 +103,11 @@ class _TelaCadastroState extends State<TelaCadastro> {
   salvaPessoa() {
     var senhaCript = sha512.convert(utf8.encode(senha.text)).toString();
     var idUsuario = uuid.v1();
+    dadosCadastrar["RedesSociais"] = {
+      "Facebook": facebookID.text,
+      "Instagram": instagramID.text,
+      "Twitter": twitterID.text
+    };
     dadosCadastrar["id"] = idUsuario;
     dadosCadastrar["senha"] = senhaCript;
     dadosCadastrar["login"] = login.text;
@@ -73,15 +119,12 @@ class _TelaCadastroState extends State<TelaCadastro> {
         dadosCadastrar["interesses"]["Tag" + element.toString()] = null;
       }
     }
+    uploadFile(login.text);
     FirebaseFirestore.instance
         .collection("users")
         .doc(idUsuario)
         .set(dadosCadastrar);
-
-    return Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const TelaLogin(title: "")),
-    );
+    Navigator.of(context).pop();
   }
 
   void setTagSelecionada(int value) {
@@ -103,6 +146,31 @@ class _TelaCadastroState extends State<TelaCadastro> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+
+            Container(
+        decoration: BoxDecoration(
+        shape: BoxShape.circle,
+            image: DecorationImage(
+                fit: BoxFit.fill,
+                image: NetworkImage(
+                    imagemPessoa == null
+                        ?'https://st4.depositphotos.com/20838724/24940/v/450/depositphotos_249401062-stock-illustration-person-profile-circle-avatar-vector.jpg'
+                        : imagemPessoa!.path)
+            )
+        ),
+
+              height: MediaQuery.of(context).size.height * 0.2,
+              width: MediaQuery.of(context).size.width * 0.3,
+
+              /*Image.file(
+                      File(imagemPessoa!.path!),
+                      fit: BoxFit.cover
+              ),*/
+            ),
+
+            ElevatedButton(
+                onPressed: () => selectFile(),
+                child: const Text("Selecione a imagem")),
             SizedBox(
               width: 400,
               child: TextField(
@@ -154,8 +222,14 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [1, 2, 3, 4, 5]
                       .map((e) => Ink(
-                            decoration: const ShapeDecoration(
-                              color: Color.fromRGBO(95, 175, 2, 1.0),
+                            decoration: ShapeDecoration(
+                              color: dadosCadastrar["interesses"]
+                                              ["Tag" + e.toString()]
+                                          .toString() ==
+                                      jsonEncode(Tag("", 0).TagToSend())
+                                          .toString()
+                                  ? Colors.grey
+                                  : Color.fromRGBO(95, 175, 2, 1.0),
                               shape: CircleBorder(),
                             ),
                             child: IconButton(
@@ -183,6 +257,51 @@ class _TelaCadastroState extends State<TelaCadastro> {
                 if (x != null) {setaM(x)}
               },
               value: sexoSelecionado,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: TextField(
+                    controller: twitterID,
+                    decoration: const InputDecoration(
+                        labelText: 'Twitter ID',
+                        border: OutlineInputBorder(),
+                        icon: Icon(FontAwesomeIcons.twitter, color: Colors.lightGreenAccent),
+                        hintText: 'Twitter ID'),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: TextField(
+                    controller: instagramID,
+                    decoration: const InputDecoration(
+                        labelText: 'Instagram ID',
+                        border: OutlineInputBorder(),
+                        icon: Icon(FontAwesomeIcons.instagram, color: Colors.lightGreenAccent),
+                        hintText: 'Instagram ID'),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: TextField(
+                    controller: facebookID,
+                    decoration: const InputDecoration(
+                        labelText: 'Facebook ID',
+                        border: OutlineInputBorder(),
+                        icon: Icon(FontAwesomeIcons.facebook, color: Colors.lightGreenAccent),
+                        hintText: 'Facebook ID'),
+                  ),
+                ),
+
+              ],
+            ),
+            const SizedBox(
+              height: 16,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(fixedSize: const Size(400, 50)),
@@ -265,7 +384,9 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     return Flexible(
                         flex: 25,
                         child: ElevatedButton(
-                            onPressed: () => onChangeTag(e),
+                            onPressed: () {
+                              onChangeTag(e);
+                            },
                             child: Text(e),
                             style: ElevatedButton.styleFrom(
                                 primary: e == tagSelecionada
@@ -281,7 +402,10 @@ class _TelaCadastroState extends State<TelaCadastro> {
                       height: 100,
                       child: ElevatedButton(
                           child: const Text("Salvar"),
-                          onPressed: () => SalvarTag()),
+                          onPressed: () {
+                            SalvarTag();
+                            Navigator.of(context).pop();
+                          }),
                     ),
                   ),
                 ),
