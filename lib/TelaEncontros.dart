@@ -12,11 +12,12 @@ import 'package:localstore/localstore.dart';
 import 'models/Tag.dart';
 
 class TelaEncontros extends StatefulWidget {
-  const TelaEncontros({Key? key, required this.title}) : super(key: key);
+  const TelaEncontros({Key? key, required this.title, required this.pessoa}) : super(key: key);
   final String title;
+  final Map<String, dynamic> pessoa;
 
   @override
-  State<TelaEncontros> createState() => _TelaEncontrosState();
+  State<TelaEncontros> createState() => _TelaEncontrosState(this.pessoa);
 }
 
 class _TelaEncontrosState extends State<TelaEncontros> {
@@ -74,7 +75,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
         "https://s2.glbimg.com/aQu7dyXnWhTmZ74IZ_jJKW5L78w=/600x400/smart/e.glbimg.com/og/ed/f/original/2022/03/28/will-smith-oscat.jpg",
         40, )
   ];
-
+  Map<String, dynamic> pessoa;
   Pessoa pessoaSelecionada = Pessoa(
       [
         Tag("Televisão", 5),
@@ -89,7 +90,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
       "https://p2.trrsf.com/image/fget/cf/648/0/images.terra.com/2022/01/07/1837881277-willyswonderland-nicolas-cage.jpg",
       40);
   String imagemSelecionada = '';
-  _TelaEncontrosState() {
+  _TelaEncontrosState(this.pessoa) {
     pessoaSelecionada = pessoas.first;
   }
   void mudaPessoa() {
@@ -113,8 +114,9 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const TelaConfigsConta(
+                            builder: (context) => TelaConfigsConta(
                                   title: '',
+                                  pessoa: this.pessoa
                                 )),
                       )
                     },

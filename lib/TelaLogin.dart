@@ -37,7 +37,7 @@ class _TelaLoginState extends State<TelaLogin> {
     loginUser.collection('users').doc("user").set(user.docs.first.data());
     return Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const TelaEncontros(title: "")),
+      MaterialPageRoute(builder: (context) => TelaEncontros(title: "", pessoa: user.docs.first.data(),)),
     );
   }
 
