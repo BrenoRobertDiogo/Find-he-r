@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:developer';
-import 'dart:html';
 import 'dart:io';
 import 'package:find_her/TelaHomeChat.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,12 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:find_her/TelaConfigsConta.dart';
 import 'package:find_her/models/Pessoa.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:http/http.dart';
 import 'package:localstore/localstore.dart';
+import 'package:http/http.dart' as http;
 
 import 'models/Tag.dart';
 
 class TelaEncontros extends StatefulWidget {
-  const TelaEncontros({Key? key, required this.title, required this.pessoa}) : super(key: key);
+  const TelaEncontros({Key? key, required this.title, required this.pessoa})
+      : super(key: key);
   final String title;
   final Map<String, dynamic> pessoa;
 
@@ -22,40 +25,37 @@ class TelaEncontros extends StatefulWidget {
 
 class _TelaEncontrosState extends State<TelaEncontros> {
   List<Pessoa> pessoas = [
-    Pessoa(
-        [
-          Tag("Televisão", 5),
-          Tag("Animais", 4),
-          Tag("Beber", 3),
-          Tag("Música", 2),
-          null
-        ],
+    Pessoa([
+      Tag("Televisão", 5),
+      Tag("Animais", 4),
+      Tag("Beber", 3),
+      Tag("Música", 2),
+      null
+    ],
         "Nicolas Cage",
         '123',
         "H",
         "https://p2.trrsf.com/image/fget/cf/648/0/images.terra.com/2022/01/07/1837881277-willyswonderland-nicolas-cage.jpg",
         40),
-    Pessoa(
-        [
-          Tag("Televisão", 5),
-          Tag("Animais", 4),
-          Tag("Beber", 3),
-          Tag("Música", 2),
-          null
-        ],
+    Pessoa([
+      Tag("Televisão", 5),
+      Tag("Animais", 4),
+      Tag("Beber", 3),
+      Tag("Música", 2),
+      null
+    ],
         "Leonardo Di Caprio",
         '123',
         "H",
         "https://entertainment.time.com/wp-content/uploads/sites/3/2012/04/leonardo-dicaprio-now.jpg?w=260",
         40),
-    Pessoa(
-        [
-          Tag("Televisão", 5),
-          Tag("Animais", 4),
-          Tag("Beber", 3),
-          Tag("Música", 2),
-          null
-        ],
+    Pessoa([
+      Tag("Televisão", 5),
+      Tag("Animais", 4),
+      Tag("Beber", 3),
+      Tag("Música", 2),
+      null
+    ],
         "Guilherme Briggs",
         '123',
         "H",
@@ -69,21 +69,21 @@ class _TelaEncontrosState extends State<TelaEncontros> {
         Tag("Música", 2),
         null
       ],
-        "Will Smith",
-        '123',
-        "H",
-        "https://s2.glbimg.com/aQu7dyXnWhTmZ74IZ_jJKW5L78w=/600x400/smart/e.glbimg.com/og/ed/f/original/2022/03/28/will-smith-oscat.jpg",
-        40, )
+      "Will Smith",
+      '123',
+      "H",
+      "https://s2.glbimg.com/aQu7dyXnWhTmZ74IZ_jJKW5L78w=/600x400/smart/e.glbimg.com/og/ed/f/original/2022/03/28/will-smith-oscat.jpg",
+      40,
+    )
   ];
   Map<String, dynamic> pessoa;
-  Pessoa pessoaSelecionada = Pessoa(
-      [
-        Tag("Televisão", 5),
-        Tag("Animais", 4),
-        Tag("Beber", 3),
-        Tag("Música", 2),
-        null
-      ],
+  Pessoa pessoaSelecionada = Pessoa([
+    Tag("Televisão", 5),
+    Tag("Animais", 4),
+    Tag("Beber", 3),
+    Tag("Música", 2),
+    null
+  ],
       "John Wick",
       '123',
       "H",
@@ -93,6 +93,19 @@ class _TelaEncontrosState extends State<TelaEncontros> {
   _TelaEncontrosState(this.pessoa) {
     pessoaSelecionada = pessoas.first;
   }
+
+  Future<void> get_interesses() async {
+    final response = await http.post(
+      Uri.parse('https://api-recomendacao-flutter.herokuapp.com/similar'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id': this.pessoa["id"],
+      }),
+    );
+  }
+
   void mudaPessoa() {
     setState(() {
       if (pessoaSelecionada == pessoas.last) {
@@ -105,6 +118,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
 
   @override
   Widget build(BuildContext context) {
+    get_interesses();
     return Scaffold(
         appBar: AppBar(
           title: const Text("Findher"),
@@ -115,9 +129,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => TelaConfigsConta(
-                                  title: '',
-                                  pessoa: this.pessoa
-                                )),
+                                title: '', pessoa: this.pessoa)),
                       )
                     },
                 icon: Image.network(
@@ -170,7 +182,8 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                       primary: Colors.green,
 
                       padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.height * 0.06, vertical: 20),
+                          horizontal: MediaQuery.of(context).size.height * 0.06,
+                          vertical: 20),
                       onPrimary: Colors.white,
                       shadowColor: Colors.greenAccent,
                       elevation: 3,
@@ -187,44 +200,53 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                           builder: (context) {
                             return Container(
                               height: MediaQuery.of(context).size.height * 0.65,
-                              child:
-                              Column(
+                              child: Column(
                                 children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(pessoaSelecionada.nome!, style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
-                                      Text(", "+pessoaSelecionada.idade!.toString(), style: const TextStyle(fontSize: 32)),
+                                      Text(pessoaSelecionada.nome!,
+                                          style: const TextStyle(
+                                              fontSize: 40,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(
+                                          ", " +
+                                              pessoaSelecionada.idade!
+                                                  .toString(),
+                                          style: const TextStyle(fontSize: 32)),
                                     ],
                                   ),
-
                                   Wrap(
-                                  spacing: MediaQuery.of(context).size.height * 0.02,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: pessoaSelecionada.tags.map((e) {
-                                    if(e != null) {
-                                      return Padding(
-                                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                        child: Container(
-                                          color: Colors.green,
-                                          width: 200,
-                                          // height: 200,
-                                          child: Column(
-                                            children: [
-                                              const Icon(Icons.star),
-                                              Text(e.Nome),
-                                              Text(e.QtdEstrelas.toString()
-
-                                                ,)
-
-                                            ],
+                                    spacing:
+                                        MediaQuery.of(context).size.height *
+                                            0.02,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: pessoaSelecionada.tags.map((e) {
+                                      if (e != null) {
+                                        return Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 0, 0, 10),
+                                          child: Container(
+                                            color: Colors.green,
+                                            width: 200,
+                                            // height: 200,
+                                            child: Column(
+                                              children: [
+                                                const Icon(Icons.star),
+                                                Text(e.Nome),
+                                                Text(
+                                                  e.QtdEstrelas.toString(),
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    }
-                                    return const Text('');
-                                  }).toList(),
-                                )],
+                                        );
+                                      }
+                                      return const Text('');
+                                    }).toList(),
+                                  )
+                                ],
                               ),
                             );
                           });
@@ -251,7 +273,8 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                       primary: Colors.red,
                       onPrimary: Colors.white,
                       padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.height * 0.06, vertical: 20),
+                          horizontal: MediaQuery.of(context).size.height * 0.06,
+                          vertical: 20),
                       shadowColor: Colors.redAccent,
                       elevation: 3,
                       // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),

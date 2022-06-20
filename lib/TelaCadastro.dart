@@ -35,7 +35,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
   final twitterID = TextEditingController();
   final facebookID = TextEditingController();
 
-
   final tagSelecionadaCampo = TextEditingController();
   String sexoSelecionado = "Homem";
   final campoNotaAtual = TextEditingController(text: "5");
@@ -65,7 +64,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
     }
   };
 
-
   Future selectFile() async {
     /*
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -81,7 +79,9 @@ class _TelaCadastroState extends State<TelaCadastro> {
 
   Future uploadFile(String login) async {
     FirebaseStorage store = FirebaseStorage.instance;
-    TaskSnapshot task = await store.ref('$login/img.${imagemPessoa!.name.split('.').last}').putData(await imagemPessoa!.readAsBytes());
+    TaskSnapshot task = await store
+        .ref('$login/img')
+        .putData(await imagemPessoa!.readAsBytes());
     /*
     final path = 'pessoas/'+login;
     final file = File(imagemPessoa!.path);
@@ -146,19 +146,14 @@ class _TelaCadastroState extends State<TelaCadastro> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
             Container(
-        decoration: BoxDecoration(
-        shape: BoxShape.circle,
-            image: DecorationImage(
-                fit: BoxFit.fill,
-                image: NetworkImage(
-                    imagemPessoa == null
-                        ?'https://st4.depositphotos.com/20838724/24940/v/450/depositphotos_249401062-stock-illustration-person-profile-circle-avatar-vector.jpg'
-                        : imagemPessoa!.path)
-            )
-        ),
-
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(imagemPessoa == null
+                          ? 'https://st4.depositphotos.com/20838724/24940/v/450/depositphotos_249401062-stock-illustration-person-profile-circle-avatar-vector.jpg'
+                          : imagemPessoa!.path))),
               height: MediaQuery.of(context).size.height * 0.2,
               width: MediaQuery.of(context).size.width * 0.3,
 
@@ -167,7 +162,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
                       fit: BoxFit.cover
               ),*/
             ),
-
             ElevatedButton(
                 onPressed: () => selectFile(),
                 child: const Text("Selecione a imagem")),
@@ -271,7 +265,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     decoration: const InputDecoration(
                         labelText: 'Twitter ID',
                         border: OutlineInputBorder(),
-                        icon: Icon(FontAwesomeIcons.twitter, color: Colors.lightGreenAccent),
+                        icon: Icon(FontAwesomeIcons.twitter,
+                            color: Colors.lightGreenAccent),
                         hintText: 'Twitter ID'),
                   ),
                 ),
@@ -282,7 +277,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     decoration: const InputDecoration(
                         labelText: 'Instagram ID',
                         border: OutlineInputBorder(),
-                        icon: Icon(FontAwesomeIcons.instagram, color: Colors.lightGreenAccent),
+                        icon: Icon(FontAwesomeIcons.instagram,
+                            color: Colors.lightGreenAccent),
                         hintText: 'Instagram ID'),
                   ),
                 ),
@@ -293,11 +289,11 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     decoration: const InputDecoration(
                         labelText: 'Facebook ID',
                         border: OutlineInputBorder(),
-                        icon: Icon(FontAwesomeIcons.facebook, color: Colors.lightGreenAccent),
+                        icon: Icon(FontAwesomeIcons.facebook,
+                            color: Colors.lightGreenAccent),
                         hintText: 'Facebook ID'),
                   ),
                 ),
-
               ],
             ),
             const SizedBox(

@@ -2,7 +2,44 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:flutter/material.dart'
-    show AppBar, BuildContext, ButtonStyle, Center, CircularProgressIndicator, Color, Colors, Column, Container, ElevatedButton, FloatingActionButton, Icon, Icons, InputBorder, InputDecoration, Key, MainAxisAlignment, MaterialApp, MaterialPageRoute, MaterialStateProperty, Navigator, OutlineInputBorder, RaisedButton, Scaffold, State, StatefulWidget, StatelessWidget, Text, TextButton, TextEditingController, TextField, Theme, ThemeData, VisualDensity, Widget, Wrap, runApp;
+    show
+        AppBar,
+        BuildContext,
+        ButtonStyle,
+        Center,
+        CircularProgressIndicator,
+        Color,
+        Colors,
+        Column,
+        Container,
+        ElevatedButton,
+        FloatingActionButton,
+        Icon,
+        Icons,
+        InputBorder,
+        InputDecoration,
+        Key,
+        MainAxisAlignment,
+        MaterialApp,
+        MaterialPageRoute,
+        MaterialStateProperty,
+        Navigator,
+        OutlineInputBorder,
+        RaisedButton,
+        Scaffold,
+        State,
+        StatefulWidget,
+        StatelessWidget,
+        Text,
+        TextButton,
+        TextEditingController,
+        TextField,
+        Theme,
+        ThemeData,
+        VisualDensity,
+        Widget,
+        Wrap,
+        runApp;
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:find_her/TelaLogin.dart';
@@ -39,45 +76,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/*
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  final Future<FirebaseApp> _app = Firebase.initializeApp();
-  // const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Find Her',
-      theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
-      ),
-      // home: const MyHomePage(title: 'Find Her Home Page'),
-      home: FutureBuilder(
-        future: _app,
-        builder: (context, snapshot) {
-          if(snapshot.hasError) {
-            print('Deu erro ${snapshot.error}');
-            return Text('Deu erro');
-          } else if(snapshot.hasData){
-              return const TelaLogin(title: 'Tela de Login');
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      )
-      // const TelaLogin(title: 'Tela de Login'),
-    );
-  }
-}
-*/
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
