@@ -11,9 +11,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'package:date_field/date_field.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:find_her/TelaLogin.dart';
 
@@ -34,6 +36,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
   final instagramID = TextEditingController();
   final twitterID = TextEditingController();
   final facebookID = TextEditingController();
+  DateTime dataNascimento = DateTime(0,0,0,0,0);
+
 
   final tagSelecionadaCampo = TextEditingController();
   String sexoSelecionado = "Homem";
@@ -108,6 +112,10 @@ class _TelaCadastroState extends State<TelaCadastro> {
       "Instagram": instagramID.text,
       "Twitter": twitterID.text
     };
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    dadosCadastrar['created'] = DateTime.parse(formatter.format(now));
+    dadosCadastrar['dataNascimento'] = dataNascimento;
     dadosCadastrar["id"] = idUsuario;
     dadosCadastrar["senha"] = senhaCript;
     dadosCadastrar["login"] = login.text;
@@ -156,11 +164,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
                           : imagemPessoa!.path))),
               height: MediaQuery.of(context).size.height * 0.2,
               width: MediaQuery.of(context).size.width * 0.3,
-
-              /*Image.file(
-                      File(imagemPessoa!.path!),
-                      fit: BoxFit.cover
-              ),*/
             ),
             ElevatedButton(
                 onPressed: () => selectFile(),
@@ -179,17 +182,40 @@ class _TelaCadastroState extends State<TelaCadastro> {
             const SizedBox(
               height: 16,
             ),
-            SizedBox(
-              width: 400,
-              child: TextField(
-                controller: login,
-                decoration: const InputDecoration(
-                    labelText: 'Login',
-                    border: OutlineInputBorder(),
-                    icon: Icon(Icons.person),
-                    hintText: 'Informe seu login'),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: DateTimeFormField(
+                    decoration: const InputDecoration(
+                      hintStyle: TextStyle(color: Colors.black45),
+                      errorStyle: TextStyle(color: Colors.redAccent),
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.event_note),
+                      labelText: 'Data Nascimento',
+                    ),
+                    mode: DateTimeFieldPickerMode.date,
+                    onDateSelected: (DateTime value) {
+                      setaDataNascimento(value);
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 200,
+                  child: TextField(
+                    controller: login,
+                    decoration: const InputDecoration(
+                        labelText: 'Login',
+                        border: OutlineInputBorder(),
+                        icon: Icon(Icons.person),
+                        hintText: 'Informe seu login'),
+                  ),
+                ),
+              ],
             ),
+
+
             const SizedBox(
               height: 16,
             ),
@@ -216,25 +242,25 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [1, 2, 3, 4, 5]
                       .map((e) => Ink(
-                            decoration: ShapeDecoration(
-                              color: dadosCadastrar["interesses"]
-                                              ["Tag" + e.toString()]
-                                          .toString() ==
-                                      jsonEncode(Tag("", 0).TagToSend())
-                                          .toString()
-                                  ? Colors.grey
-                                  : Color.fromRGBO(95, 175, 2, 1.0),
-                              shape: CircleBorder(),
-                            ),
-                            child: IconButton(
-                              icon: const Icon(Icons.star),
-                              color: Colors.white,
-                              onPressed: () {
-                                setTagSelecionada(e);
-                                modalTags();
-                              },
-                            ),
-                          ))
+                    decoration: ShapeDecoration(
+                      color: dadosCadastrar["interesses"]
+                      ["Tag" + e.toString()]
+                          .toString() ==
+                          jsonEncode(Tag("", 0).TagToSend())
+                              .toString()
+                          ? Colors.grey
+                          : Color.fromRGBO(95, 175, 2, 1.0),
+                      shape: CircleBorder(),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.star),
+                      color: Colors.white,
+                      onPressed: () {
+                        setTagSelecionada(e);
+                        modalTags();
+                      },
+                    ),
+                  ))
                       .toList()),
             ),
             const SizedBox(
@@ -409,6 +435,13 @@ class _TelaCadastroState extends State<TelaCadastro> {
             ),
           );
         });
+  }
+
+  void setaDataNascimento(DateTime data) {
+    print(data);
+    setState(() {
+      dataNascimento = data;
+    });
   }
 
   void verificaNota(String nota) {
