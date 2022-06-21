@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -10,6 +11,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart';
 import 'package:localstore/localstore.dart';
 import 'package:http/http.dart' as http;
+import 'package:find_her/Operations.dart';
 
 import 'models/Tag.dart';
 
@@ -77,6 +79,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
     )
   ];
   Map<String, dynamic> pessoa;
+  late dynamic Usersinteresses = {};
   Pessoa pessoaSelecionada = Pessoa([
     Tag("Televisão", 5),
     Tag("Animais", 4),
@@ -90,6 +93,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
       "https://p2.trrsf.com/image/fget/cf/648/0/images.terra.com/2022/01/07/1837881277-willyswonderland-nicolas-cage.jpg",
       40);
   String imagemSelecionada = '';
+
   _TelaEncontrosState(this.pessoa) {
     pessoaSelecionada = pessoas.first;
   }
@@ -104,6 +108,8 @@ class _TelaEncontrosState extends State<TelaEncontros> {
         'id': this.pessoa["id"],
       }),
     );
+    Map<String, dynamic> unsorted = jsonDecode(response.body)["similares"];
+    Usersinteresses = unsorted;
   }
 
   void mudaPessoa() {
@@ -115,6 +121,13 @@ class _TelaEncontrosState extends State<TelaEncontros> {
       }
     });
   }
+
+  // Future<void> getPessoa() async {
+  //   var user = await Operations.getData('users')
+  //       .where('id', isEqualTo: login.text)
+  //       .where('senha', isEqualTo: senhaCript)
+  //       .get();
+  // }
 
   @override
   Widget build(BuildContext context) {
