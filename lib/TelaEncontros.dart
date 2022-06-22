@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_her/TelaHomeChat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -122,12 +123,11 @@ class _TelaEncontrosState extends State<TelaEncontros> {
     });
   }
 
-  // Future<void> getPessoa() async {
-  //   var user = await Operations.getData('users')
-  //       .where('id', isEqualTo: login.text)
-  //       .where('senha', isEqualTo: senhaCript)
-  //       .get();
-  // }
+  Future<QuerySnapshot<Map<String, dynamic>>> getPessoa(id) async {
+    var user =
+        await Operations.getData('users').where('id', isEqualTo: id).get();
+    return user;
+  }
 
   @override
   Widget build(BuildContext context) {
