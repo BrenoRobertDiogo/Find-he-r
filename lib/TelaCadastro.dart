@@ -36,8 +36,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
   final instagramID = TextEditingController();
   final twitterID = TextEditingController();
   final facebookID = TextEditingController();
-  DateTime dataNascimento = DateTime(0,0,0,0,0);
-
+  DateTime dataNascimento = DateTime(0, 0, 0, 0, 0);
 
   final tagSelecionadaCampo = TextEditingController();
   String sexoSelecionado = "Homem";
@@ -69,11 +68,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
   };
 
   Future selectFile() async {
-    /*
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      // type: FileType.custom,
-      // allowedExtensions: ['jpg'],
-    );*/
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image == null) return;
     setState(() {
@@ -86,13 +80,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
     TaskSnapshot task = await store
         .ref('$login/img')
         .putData(await imagemPessoa!.readAsBytes());
-    /*
-    final path = 'pessoas/'+login;
-    final file = File(imagemPessoa!.path);
-    final ref = FirebaseStorage.instance.ref().child(path);
-    UploadTask uploadTask = ref.putFile(imagemPessoa!.readAsBytes());
-    final snapshot = await uploadTask.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();*/
   }
 
   void SalvarTag() {
@@ -121,6 +108,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
     dadosCadastrar["login"] = login.text;
     dadosCadastrar["nome"] = nomeC.text;
     dadosCadastrar["sexo"] = sexoSelecionado;
+    dadosCadastrar["contatos"] = [];
     for (var element in [1, 2, 3, 4, 5]) {
       if (dadosCadastrar["interesses"]["Tag" + element.toString()] ==
           {"NomeTag": "", "Estrelas": 0}) {
@@ -214,8 +202,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
                 ),
               ],
             ),
-
-
             const SizedBox(
               height: 16,
             ),
@@ -242,25 +228,25 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [1, 2, 3, 4, 5]
                       .map((e) => Ink(
-                    decoration: ShapeDecoration(
-                      color: dadosCadastrar["interesses"]
-                      ["Tag" + e.toString()]
-                          .toString() ==
-                          jsonEncode(Tag("", 0).TagToSend())
-                              .toString()
-                          ? Colors.grey
-                          : Color.fromRGBO(95, 175, 2, 1.0),
-                      shape: CircleBorder(),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.star),
-                      color: Colors.white,
-                      onPressed: () {
-                        setTagSelecionada(e);
-                        modalTags();
-                      },
-                    ),
-                  ))
+                            decoration: ShapeDecoration(
+                              color: dadosCadastrar["interesses"]
+                                              ["Tag" + e.toString()]
+                                          .toString() ==
+                                      jsonEncode(Tag("", 0).TagToSend())
+                                          .toString()
+                                  ? Colors.grey
+                                  : Color.fromRGBO(95, 175, 2, 1.0),
+                              shape: CircleBorder(),
+                            ),
+                            child: IconButton(
+                              icon: const Icon(Icons.star),
+                              color: Colors.white,
+                              onPressed: () {
+                                setTagSelecionada(e);
+                                modalTags();
+                              },
+                            ),
+                          ))
                       .toList()),
             ),
             const SizedBox(

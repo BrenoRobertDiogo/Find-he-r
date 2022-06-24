@@ -25,8 +25,6 @@ class _TelaLoginState extends State<TelaLogin> {
 
   logar() async {
     var senhaCript = sha512.convert(utf8.encode(senha.text)).toString();
-    final loginUser = Localstore.instance;
-    // QuerySnapshot users = Operations.getData('users').get();// FirebaseFirestore.instance.collection('users').get();
     var user = await Operations.getData('users')
         .where('login', isEqualTo: login.text)
         .where('senha', isEqualTo: senhaCript)
@@ -35,7 +33,6 @@ class _TelaLoginState extends State<TelaLogin> {
     if (user.docs.isEmpty) {
       return _exibirDialogo();
     }
-    loginUser.collection('users').doc("user").set(user.docs.first.data());
     Map<String, dynamic> userId = user.docs.first.data();
     Map<String, dynamic> similares = await getInteresses(userId["id"]);
     return Navigator.push(
@@ -43,7 +40,7 @@ class _TelaLoginState extends State<TelaLogin> {
       MaterialPageRoute(
           builder: (context) => TelaEncontros(
                 title: "",
-                pessoa: user.docs.first.data(),
+                pessoaUser: user.docs.first.data(),
                 similares: similares,
               )),
     );

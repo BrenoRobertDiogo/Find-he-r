@@ -9,39 +9,39 @@ import 'package:flutter/material.dart';
 import 'package:find_her/TelaConfigsConta.dart';
 import 'package:find_her/models/Pessoa.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:localstore/localstore.dart';
 import 'package:http/http.dart' as http;
 import 'package:find_her/Operations.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'models/Tag.dart';
 
 class TelaEncontros extends StatefulWidget {
   const TelaEncontros({
     Key? key,
     required this.title,
-    required this.pessoa,
+    required this.pessoaUser,
     required this.similares,
   }) : super(key: key);
   final String title;
-  final Map<String, dynamic> pessoa;
+  final Map<String, dynamic> pessoaUser;
   final Map<String, dynamic> similares;
 
   @override
   State<TelaEncontros> createState() =>
-      _TelaEncontrosState(this.pessoa, this.similares);
+      _TelaEncontrosState(this.pessoaUser, this.similares);
 }
 
 class _TelaEncontrosState extends State<TelaEncontros> {
   Map<String, dynamic> similares;
 
   String imagemSelecionada = '';
-
+  Map<String, dynamic> pessoaUser;
   Map<String, dynamic> pessoa = {"NomeTag": "pessoa"};
   Map<String, dynamic> pessoaAnterior = {"NomeTag": "pessoa"};
   String pessoaSelecionada = "";
   int cont = 0;
 
-  _TelaEncontrosState(this.pessoa, this.similares) {
+  _TelaEncontrosState(this.pessoaUser, this.similares) {
     pessoaSelecionada = this.similares.keys.first;
     getPessoa(pessoaSelecionada);
     getImagemUser();
@@ -61,12 +61,30 @@ class _TelaEncontrosState extends State<TelaEncontros> {
         getPessoa(pessoaSelecionada);
       }
     });
+    this.pessoaUser["contatos"].add(pessoa);
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(this.pessoaUser["id"])
+        .update(this.pessoaUser);
+  }
+
+  void mudaPessoaDislike() async {
+    setState(() {
+      if (pessoaSelecionada == this.similares.keys.last) {
+        pessoaSelecionada = this.similares.keys.first;
+        getPessoa(pessoaSelecionada);
+        cont = 0;
+      } else {
+        pessoaAnterior = pessoa;
+        cont += 1;
+        pessoaSelecionada = this.similares.keys.elementAt(cont);
+        getPessoa(pessoaSelecionada);
+      }
+    });
   }
 
   Future<String> getImagemUser() async {
-    final ref = FirebaseStorage.instance
-        .ref()
-        .child('${pessoa["login"]}/img'); // 'teste'
+    final ref = FirebaseStorage.instance.ref().child('${pessoa["login"]}/img');
     var url = await ref.getDownloadURL();
 
     return url;
@@ -90,7 +108,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => TelaConfigsConta(
-                                title: '', pessoa: this.pessoa)),
+                                title: '', pessoa: this.pessoaUser)),
                       )
                     },
                 icon: Image.network(
@@ -210,7 +228,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                     label: const Text('Não gostei'),
                     // style:  ElevatedButton.styleFrom(fixedSize: Size(MediaQuery.of(context).size.width * 0.5, 50)),
                     onPressed: () {
-                      mudaPessoa();
+                      mudaPessoaDislike();
                     },
                   ),
                 ],
