@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:localstore/localstore.dart';
+import 'package:http/http.dart' as http;
 
 import 'TelaEncontros.dart';
 
@@ -35,10 +36,34 @@ class _TelaLoginState extends State<TelaLogin> {
       return _exibirDialogo();
     }
     loginUser.collection('users').doc("user").set(user.docs.first.data());
+    Map<String, dynamic> userId = user.docs.first.data();
+    Map<String, dynamic> similares = await getInteresses(userId["id"]);
     return Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TelaEncontros(title: "", pessoa: user.docs.first.data(),)),
+      MaterialPageRoute(
+          builder: (context) => TelaEncontros(
+                title: "",
+                pessoa: user.docs.first.data(),
+                similares: similares,
+              )),
     );
+  }
+
+  Future<Map<String, dynamic>> getInteresses(id) async {
+    final response = await http.post(
+      Uri.parse('https://api-recomendacao-flutter.herokuapp.com/similar'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id': id,
+      }),
+    );
+
+    Map<String, dynamic> Usersinteresses =
+        await jsonDecode(response.body)["similares"];
+
+    return Usersinteresses;
   }
 
   void _exibirDialogo() {

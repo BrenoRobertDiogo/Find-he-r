@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:find_her/TelaConfigsConta.dart';
 import 'package:find_her/models/Pessoa.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:http/http.dart';
 import 'package:localstore/localstore.dart';
 import 'package:http/http.dart' as http;
 import 'package:find_her/Operations.dart';
@@ -17,13 +16,19 @@ import 'package:find_her/Operations.dart';
 import 'models/Tag.dart';
 
 class TelaEncontros extends StatefulWidget {
-  const TelaEncontros({Key? key, required this.title, required this.pessoa})
-      : super(key: key);
+  const TelaEncontros({
+    Key? key,
+    required this.title,
+    required this.pessoa,
+    required this.similares,
+  }) : super(key: key);
   final String title;
   final Map<String, dynamic> pessoa;
+  final Map<String, dynamic> similares;
 
   @override
-  State<TelaEncontros> createState() => _TelaEncontrosState(this.pessoa);
+  State<TelaEncontros> createState() =>
+      _TelaEncontrosState(this.pessoa, this.similares);
 }
 
 class _TelaEncontrosState extends State<TelaEncontros> {
@@ -80,7 +85,9 @@ class _TelaEncontrosState extends State<TelaEncontros> {
     )
   ];
   Map<String, dynamic> pessoa;
-  late dynamic Usersinteresses = {};
+  Map<String, dynamic> similares;
+  // Future<Map<String, dynamic>> similares;
+
   Pessoa pessoaSelecionada = Pessoa([
     Tag("Televisão", 5),
     Tag("Animais", 4),
@@ -94,23 +101,8 @@ class _TelaEncontrosState extends State<TelaEncontros> {
       "https://p2.trrsf.com/image/fget/cf/648/0/images.terra.com/2022/01/07/1837881277-willyswonderland-nicolas-cage.jpg",
       40);
   String imagemSelecionada = '';
-
-  _TelaEncontrosState(this.pessoa) {
+  _TelaEncontrosState(this.pessoa, this.similares) {
     pessoaSelecionada = pessoas.first;
-  }
-
-  Future<void> get_interesses() async {
-    final response = await http.post(
-      Uri.parse('https://api-recomendacao-flutter.herokuapp.com/similar'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'id': this.pessoa["id"],
-      }),
-    );
-    Map<String, dynamic> unsorted = jsonDecode(response.body)["similares"];
-    Usersinteresses = unsorted;
   }
 
   void mudaPessoa() {
@@ -123,15 +115,15 @@ class _TelaEncontrosState extends State<TelaEncontros> {
     });
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getPessoa(id) async {
+  Future<Map<String, dynamic>> getPessoa(id) async {
     var user =
         await Operations.getData('users').where('id', isEqualTo: id).get();
-    return user;
+    return user.docs.first.data();
   }
 
   @override
   Widget build(BuildContext context) {
-    get_interesses();
+    print(getPessoa(this.similares.keys.first));
     return Scaffold(
         appBar: AppBar(
           title: const Text("Findher"),
