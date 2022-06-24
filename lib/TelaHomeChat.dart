@@ -10,16 +10,22 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:localstore/localstore.dart';
 
 class TelaHomeChat extends StatefulWidget {
-  const TelaHomeChat({Key? key, required this.title}) : super(key: key);
+  const TelaHomeChat({Key? key, required this.title, required this.pessoaUser})
+      : super(key: key);
   final String title;
+  final Map<String, dynamic> pessoaUser;
 
   @override
-  State<TelaHomeChat> createState() => _TelaHomeChatState();
+  State<TelaHomeChat> createState() => _TelaHomeChatState(this.pessoaUser);
 }
 
 class _TelaHomeChatState extends State<TelaHomeChat> {
   final nome = TextEditingController();
   Localstore loginUser = Localstore.instance;
+
+  Map<String, dynamic> pessoaUser;
+
+  _TelaHomeChatState(this.pessoaUser) {}
 
   void abrirUrl(host, path) async {
     final Uri toLaunch = Uri(scheme: 'https', host: host, path: path);
@@ -27,8 +33,8 @@ class _TelaHomeChatState extends State<TelaHomeChat> {
   }
 
   verInteresses() async {
-    final dataUser = await loginUser.collection('users').doc("user").get();
-    Map<String, dynamic> interesses = await dataUser!["interesses"];
+    final dataUser = this.pessoaUser;
+    Map<String, dynamic> interesses = dataUser["interesses"];
     List<String> numeros = ["1", "2", "3", "4", "5"];
     showModalBottomSheet(
         context: context,
@@ -99,9 +105,7 @@ class _TelaHomeChatState extends State<TelaHomeChat> {
           ),
           IconButton(
             onPressed: () => abrirUrl("www.facebook.com", "VenomExtreme/"),
-            icon: const Icon(
-
-                FontAwesomeIcons.facebook,
+            icon: const Icon(FontAwesomeIcons.facebook,
                 color: Colors.blue, size: 20.0),
           ),
           IconButton(

@@ -120,8 +120,9 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const TelaHomeChat(
+                            builder: (context) => TelaHomeChat(
                                   title: '',
+                                  pessoaUser: this.pessoaUser,
                                 )),
                       )
                     },
