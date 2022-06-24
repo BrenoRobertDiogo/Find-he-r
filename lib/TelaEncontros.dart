@@ -12,7 +12,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:localstore/localstore.dart';
 import 'package:http/http.dart' as http;
 import 'package:find_her/Operations.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
 import 'models/Tag.dart';
 
 class TelaEncontros extends StatefulWidget {
@@ -32,98 +32,54 @@ class TelaEncontros extends StatefulWidget {
 }
 
 class _TelaEncontrosState extends State<TelaEncontros> {
-  List<Pessoa> pessoas = [
-    Pessoa([
-      Tag("Televisão", 5),
-      Tag("Animais", 4),
-      Tag("Beber", 3),
-      Tag("Música", 2),
-      null
-    ],
-        "Nicolas Cage",
-        '123',
-        "H",
-        "https://p2.trrsf.com/image/fget/cf/648/0/images.terra.com/2022/01/07/1837881277-willyswonderland-nicolas-cage.jpg",
-        40),
-    Pessoa([
-      Tag("Televisão", 5),
-      Tag("Animais", 4),
-      Tag("Beber", 3),
-      Tag("Música", 2),
-      null
-    ],
-        "Leonardo Di Caprio",
-        '123',
-        "H",
-        "https://entertainment.time.com/wp-content/uploads/sites/3/2012/04/leonardo-dicaprio-now.jpg?w=260",
-        40),
-    Pessoa([
-      Tag("Televisão", 5),
-      Tag("Animais", 4),
-      Tag("Beber", 3),
-      Tag("Música", 2),
-      null
-    ],
-        "Guilherme Briggs",
-        '123',
-        "H",
-        "https://upload.wikimedia.org/wikipedia/commons/7/71/GuilhermeBriggs.jpg",
-        40),
-    Pessoa(
-      [
-        Tag("Televisão", 5),
-        Tag("Animais", 4),
-        Tag("Beber", 3),
-        Tag("Música", 2),
-        null
-      ],
-      "Will Smith",
-      '123',
-      "H",
-      "https://s2.glbimg.com/aQu7dyXnWhTmZ74IZ_jJKW5L78w=/600x400/smart/e.glbimg.com/og/ed/f/original/2022/03/28/will-smith-oscat.jpg",
-      40,
-    )
-  ];
-  Map<String, dynamic> pessoa;
   Map<String, dynamic> similares;
-  // Future<Map<String, dynamic>> similares;
 
-  Pessoa pessoaSelecionada = Pessoa([
-    Tag("Televisão", 5),
-    Tag("Animais", 4),
-    Tag("Beber", 3),
-    Tag("Música", 2),
-    null
-  ],
-      "John Wick",
-      '123',
-      "H",
-      "https://p2.trrsf.com/image/fget/cf/648/0/images.terra.com/2022/01/07/1837881277-willyswonderland-nicolas-cage.jpg",
-      40);
   String imagemSelecionada = '';
+
+  Map<String, dynamic> pessoa = {"NomeTag": "pessoa"};
+  Map<String, dynamic> pessoaAnterior = {"NomeTag": "pessoa"};
+  String pessoaSelecionada = "";
+  int cont = 0;
+
   _TelaEncontrosState(this.pessoa, this.similares) {
-    pessoaSelecionada = pessoas.first;
+    pessoaSelecionada = this.similares.keys.first;
+    getPessoa(pessoaSelecionada);
+    getImagemUser();
+    pessoaAnterior = pessoa;
   }
 
-  void mudaPessoa() {
+  void mudaPessoa() async {
     setState(() {
-      if (pessoaSelecionada == pessoas.last) {
-        pessoaSelecionada = pessoas.first;
+      if (pessoaSelecionada == this.similares.keys.last) {
+        pessoaSelecionada = this.similares.keys.first;
+        getPessoa(pessoaSelecionada);
+        cont = 0;
       } else {
-        pessoaSelecionada = pessoas[pessoas.lastIndexOf(pessoaSelecionada) + 1];
+        pessoaAnterior = pessoa;
+        cont += 1;
+        pessoaSelecionada = this.similares.keys.elementAt(cont);
+        getPessoa(pessoaSelecionada);
       }
     });
   }
 
-  Future<Map<String, dynamic>> getPessoa(id) async {
+  Future<String> getImagemUser() async {
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('${pessoa["login"]}/img'); // 'teste'
+    var url = await ref.getDownloadURL();
+
+    return url;
+  }
+
+  void getPessoa(id) async {
     var user =
         await Operations.getData('users').where('id', isEqualTo: id).get();
-    return user.docs.first.data();
+    pessoa = user.docs.first.data();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(getPessoa(this.similares.keys.first));
     return Scaffold(
         appBar: AppBar(
           title: const Text("Findher"),
@@ -161,11 +117,32 @@ class _TelaEncontrosState extends State<TelaEncontros> {
             Center(
               child: Column(
                 children: [
-                  Text('${pessoaSelecionada.nome}',
+                  Text('${pessoa["nome"]}',
                       style: const TextStyle(fontSize: 25)),
                   SizedBox(
-                    child: Image(
-                        image: NetworkImage('${pessoaSelecionada.imagem}')),
+                    child: FutureBuilder(
+                      future: getImagemUser(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done &&
+                            snapshot.hasData) {
+                          return Container(
+                            width: 300,
+                            height: 250,
+                            child: Image.network(snapshot.data!),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                          ); //
+                        }
+                        if (snapshot.connectionState ==
+                                ConnectionState.waiting ||
+                            !snapshot.hasData) {
+                          return const CircularProgressIndicator();
+                        }
+                        return Container();
+                      },
+                    ),
                     width: MediaQuery.of(context).size.width *
                         0.6, // Pegando tamanho real da tela e transformando em porcentagem
                     height: MediaQuery.of(context).size.height * 0.6,
@@ -196,66 +173,12 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                     ),
                     label: const Text('Gostei'),
                     // style:  ElevatedButton.styleFrom(fixedSize: Size(MediaQuery.of(context).size.width * 0.5, 50)),
-                    onPressed: mudaPessoa,
+                    onPressed: () {
+                      mudaPessoa();
+                    },
                   ),
                   ElevatedButton.icon(
-                    onPressed: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return Container(
-                              height: MediaQuery.of(context).size.height * 0.65,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(pessoaSelecionada.nome!,
-                                          style: const TextStyle(
-                                              fontSize: 40,
-                                              fontWeight: FontWeight.bold)),
-                                      Text(
-                                          ", " +
-                                              pessoaSelecionada.idade!
-                                                  .toString(),
-                                          style: const TextStyle(fontSize: 32)),
-                                    ],
-                                  ),
-                                  Wrap(
-                                    spacing:
-                                        MediaQuery.of(context).size.height *
-                                            0.02,
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
-                                    children: pessoaSelecionada.tags.map((e) {
-                                      if (e != null) {
-                                        return Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 0, 10),
-                                          child: Container(
-                                            color: Colors.green,
-                                            width: 200,
-                                            // height: 200,
-                                            child: Column(
-                                              children: [
-                                                const Icon(Icons.star),
-                                                Text(e.Nome),
-                                                Text(
-                                                  e.QtdEstrelas.toString(),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                      return const Text('');
-                                    }).toList(),
-                                  )
-                                ],
-                              ),
-                            );
-                          });
-                    },
+                    onPressed: verInteresses,
                     style: ElevatedButton.styleFrom(
                       primary: const Color.fromRGBO(000, 000, 000, 0.0),
                       padding: const EdgeInsets.symmetric(
@@ -286,12 +209,64 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                     ),
                     label: const Text('Não gostei'),
                     // style:  ElevatedButton.styleFrom(fixedSize: Size(MediaQuery.of(context).size.width * 0.5, 50)),
-                    onPressed: mudaPessoa,
+                    onPressed: () {
+                      mudaPessoa();
+                    },
                   ),
                 ],
               ),
             )
           ],
         ));
+  }
+
+  void verInteresses() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.65,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(pessoaAnterior["nome"],
+                        style: const TextStyle(
+                            fontSize: 40, fontWeight: FontWeight.bold)),
+                    Text(", " + 12.toString(), //IDADECOLCA AQUI TROUXA
+                        style: const TextStyle(fontSize: 32)),
+                  ],
+                ),
+                Wrap(
+                  spacing: MediaQuery.of(context).size.height * 0.02,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [1, 2, 3, 4, 5].map((e) {
+                    String es = e.toString();
+                    var tag = jsonDecode(pessoa["interesses"]["Tag" + es]);
+                    if (pessoa["interesses"]["Tag" + es] != null) {
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                        child: Container(
+                          color: Colors.green,
+                          width: 200,
+                          // height: 200,
+                          child: Column(
+                            children: [
+                              const Icon(Icons.star),
+                              Text(tag["NomeTag"]),
+                              Text(tag["Estrelas"].toString()),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                    return const Text('');
+                  }).toList(),
+                )
+              ],
+            ),
+          );
+        });
   }
 }
