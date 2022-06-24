@@ -19,29 +19,28 @@ class TelaEncontros extends StatefulWidget {
   const TelaEncontros({
     Key? key,
     required this.title,
-    required this.pessoaUser,
+    required this.pessoa,
     required this.similares,
   }) : super(key: key);
   final String title;
-  final Map<String, dynamic> pessoaUser;
+  final Map<String, dynamic> pessoa;
   final Map<String, dynamic> similares;
 
   @override
   State<TelaEncontros> createState() =>
-      _TelaEncontrosState(this.pessoaUser, this.similares);
+      _TelaEncontrosState(this.pessoa, this.similares);
 }
 
 class _TelaEncontrosState extends State<TelaEncontros> {
   Map<String, dynamic> similares;
 
   String imagemSelecionada = '';
-  Map<String, dynamic> pessoaUser;
   Map<String, dynamic> pessoa = {"NomeTag": "pessoa"};
   Map<String, dynamic> pessoaAnterior = {"NomeTag": "pessoa"};
   String pessoaSelecionada = "";
   int cont = 0;
 
-  _TelaEncontrosState(this.pessoaUser, this.similares) {
+  _TelaEncontrosState(this.pessoa, this.similares) {
     pessoaSelecionada = this.similares.keys.first;
     getPessoa(pessoaSelecionada);
     getImagemUser();
@@ -61,11 +60,11 @@ class _TelaEncontrosState extends State<TelaEncontros> {
         getPessoa(pessoaSelecionada);
       }
     });
-    this.pessoaUser["contatos"].add(pessoa);
+    this.pessoa["contatos"].add(pessoa);
     FirebaseFirestore.instance
         .collection("users")
-        .doc(this.pessoaUser["id"])
-        .update(this.pessoaUser);
+        .doc(this.pessoa["id"])
+        .update(this.pessoa);
   }
 
   void mudaPessoaDislike() async {
@@ -86,7 +85,6 @@ class _TelaEncontrosState extends State<TelaEncontros> {
   Future<String> getImagemUser() async {
     final ref = FirebaseStorage.instance.ref().child('${pessoa["login"]}/img');
     var url = await ref.getDownloadURL();
-
     return url;
   }
 
@@ -108,7 +106,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => TelaConfigsConta(
-                                title: '', pessoa: this.pessoaUser)),
+                                title: '', pessoa: this.pessoa)),
                       )
                     },
                 icon: Image.network(
@@ -122,7 +120,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                         MaterialPageRoute(
                             builder: (context) => TelaHomeChat(
                                   title: '',
-                                  pessoaUser: this.pessoaUser,
+                                  pessoa: this.pessoa,
                                 )),
                       )
                     },

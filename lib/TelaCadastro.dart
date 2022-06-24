@@ -1,6 +1,7 @@
 export 'TelaCadastro.dart';
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -18,6 +19,7 @@ import 'dart:convert';
 import 'package:date_field/date_field.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:find_her/TelaLogin.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 import 'Operations.dart';
 
@@ -41,6 +43,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
   final tagSelecionadaCampo = TextEditingController();
   String sexoSelecionado = "Homem";
   final campoNotaAtual = TextEditingController(text: "5");
+  String imagemPadrao = "assets/imagemPadrao.png";
   XFile? imagemPessoa = XFile('assets/imagemPadrao.png');
   final ImagePicker _picker = ImagePicker();
   List<String> StringsTags = [
@@ -69,7 +72,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
 
   Future selectFile() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image == null) return;
     setState(() {
       imagemPessoa = image;
     });
@@ -77,9 +79,14 @@ class _TelaCadastroState extends State<TelaCadastro> {
 
   Future uploadFile(String login) async {
     FirebaseStorage store = FirebaseStorage.instance;
-    TaskSnapshot task = await store
-        .ref('$login/img')
-        .putData(await imagemPessoa!.readAsBytes());
+    if (imagemPessoa!.path != "assets/imagemPadrao.png") {
+      TaskSnapshot task = await store
+          .ref('$login/img')
+          .putData(await imagemPessoa!.readAsBytes());
+    }
+    final ByteData bytes = await rootBundle.load(imagemPessoa!.path);
+    final Uint8List list = bytes.buffer.asUint8List();
+    TaskSnapshot task = await store.ref('$login/img').putData(list);
   }
 
   void SalvarTag() {
@@ -133,6 +140,13 @@ class _TelaCadastroState extends State<TelaCadastro> {
     });
   }
 
+  mostrarImg() {
+    if (imagemPessoa!.path != "assets/imagemPadrao.png") {
+      return FileImage(File(imagemPessoa!.path));
+    }
+    return AssetImage(imagemPadrao);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<String> _valores = ['Homem', 'Mulher', 'Outros'];
@@ -145,11 +159,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
             Container(
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(imagemPessoa == null
-                          ? 'https://st4.depositphotos.com/20838724/24940/v/450/depositphotos_249401062-stock-illustration-person-profile-circle-avatar-vector.jpg'
-                          : imagemPessoa!.path))),
+                  image:
+                      DecorationImage(fit: BoxFit.fill, image: mostrarImg())),
               height: MediaQuery.of(context).size.height * 0.2,
               width: MediaQuery.of(context).size.width * 0.3,
             ),

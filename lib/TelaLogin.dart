@@ -40,7 +40,7 @@ class _TelaLoginState extends State<TelaLogin> {
       MaterialPageRoute(
           builder: (context) => TelaEncontros(
                 title: "",
-                pessoaUser: user.docs.first.data(),
+                pessoa: user.docs.first.data(),
                 similares: similares,
               )),
     );

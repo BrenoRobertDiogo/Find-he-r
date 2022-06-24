@@ -10,22 +10,22 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:localstore/localstore.dart';
 
 class TelaHomeChat extends StatefulWidget {
-  const TelaHomeChat({Key? key, required this.title, required this.pessoaUser})
+  const TelaHomeChat({Key? key, required this.title, required this.pessoa})
       : super(key: key);
   final String title;
-  final Map<String, dynamic> pessoaUser;
+  final Map<String, dynamic> pessoa;
 
   @override
-  State<TelaHomeChat> createState() => _TelaHomeChatState(this.pessoaUser);
+  State<TelaHomeChat> createState() => _TelaHomeChatState(this.pessoa);
 }
 
 class _TelaHomeChatState extends State<TelaHomeChat> {
   final nome = TextEditingController();
   Localstore loginUser = Localstore.instance;
 
-  Map<String, dynamic> pessoaUser;
+  Map<String, dynamic> pessoa;
 
-  _TelaHomeChatState(this.pessoaUser) {}
+  _TelaHomeChatState(this.pessoa) {}
 
   void abrirUrl(host, path) async {
     final Uri toLaunch = Uri(scheme: 'https', host: host, path: path);
@@ -33,7 +33,7 @@ class _TelaHomeChatState extends State<TelaHomeChat> {
   }
 
   verInteresses() async {
-    final dataUser = this.pessoaUser;
+    final dataUser = this.pessoa;
     Map<String, dynamic> interesses = dataUser["interesses"];
     List<String> numeros = ["1", "2", "3", "4", "5"];
     showModalBottomSheet(
