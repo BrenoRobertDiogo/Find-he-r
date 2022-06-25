@@ -35,6 +35,11 @@ class _TelaLoginState extends State<TelaLogin> {
     }
     Map<String, dynamic> userId = user.docs.first.data();
     Map<String, dynamic> similares = await getInteresses(userId["id"]);
+    QuerySnapshot<Map<String, dynamic>> primeiroUserQuery =
+        await Operations.getData('users')
+            .where('id', isEqualTo: similares.keys.first)
+            .get();
+    Map<String, dynamic> primeiroUser = primeiroUserQuery.docs.first.data();
     return Navigator.push(
       context,
       MaterialPageRoute(
@@ -42,6 +47,7 @@ class _TelaLoginState extends State<TelaLogin> {
                 title: "",
                 pessoa: user.docs.first.data(),
                 similares: similares,
+                primeiroUser: primeiroUser,
               )),
     );
   }
@@ -57,10 +63,10 @@ class _TelaLoginState extends State<TelaLogin> {
       }),
     );
 
-    Map<String, dynamic> Usersinteresses =
+    Map<String, dynamic> usersInteresses =
         await jsonDecode(response.body)["similares"];
 
-    return Usersinteresses;
+    return usersInteresses;
   }
 
   void _exibirDialogo() {

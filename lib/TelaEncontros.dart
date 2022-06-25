@@ -21,30 +21,29 @@ class TelaEncontros extends StatefulWidget {
     required this.title,
     required this.pessoa,
     required this.similares,
+    required this.primeiroUser,
   }) : super(key: key);
   final String title;
   final Map<String, dynamic> pessoa;
   final Map<String, dynamic> similares;
+  final Map<String, dynamic> primeiroUser;
 
   @override
   State<TelaEncontros> createState() =>
-      _TelaEncontrosState(this.pessoa, this.similares);
+      _TelaEncontrosState(this.pessoa, this.similares, this.primeiroUser);
 }
 
 class _TelaEncontrosState extends State<TelaEncontros> {
   Map<String, dynamic> similares;
-
+  Map<String, dynamic> primeiroUser;
+  Map<String, dynamic> pessoa;
   String imagemSelecionada = '';
-  Map<String, dynamic> pessoa = {"NomeTag": "pessoa"};
-  Map<String, dynamic> pessoaAnterior = {"NomeTag": "pessoa"};
   String pessoaSelecionada = "";
-  int cont = 0;
+  int cont = 1;
 
-  _TelaEncontrosState(this.pessoa, this.similares) {
-    pessoaSelecionada = this.similares.keys.first;
-    getPessoa(pessoaSelecionada);
+  _TelaEncontrosState(this.pessoa, this.similares, this.primeiroUser) {
+    pessoaSelecionada = this.similares.keys.elementAt(0);
     getImagemUser();
-    pessoaAnterior = pessoa;
   }
 
   void mudaPessoa() async {
@@ -52,19 +51,19 @@ class _TelaEncontrosState extends State<TelaEncontros> {
       if (pessoaSelecionada == this.similares.keys.last) {
         pessoaSelecionada = this.similares.keys.first;
         getPessoa(pessoaSelecionada);
-        cont = 0;
+        cont = 1;
       } else {
-        pessoaAnterior = pessoa;
-        cont += 1;
+        print(this.similares.keys);
         pessoaSelecionada = this.similares.keys.elementAt(cont);
         getPessoa(pessoaSelecionada);
+        cont += 1;
       }
     });
-    this.pessoa["contatos"].add(pessoa);
+    this.pessoa["contatos"].add(primeiroUser);
     FirebaseFirestore.instance
         .collection("users")
-        .doc(this.pessoa["id"])
-        .update(this.pessoa);
+        .doc(pessoa["id"])
+        .update(pessoa);
   }
 
   void mudaPessoaDislike() async {
@@ -74,7 +73,6 @@ class _TelaEncontrosState extends State<TelaEncontros> {
         getPessoa(pessoaSelecionada);
         cont = 0;
       } else {
-        pessoaAnterior = pessoa;
         cont += 1;
         pessoaSelecionada = this.similares.keys.elementAt(cont);
         getPessoa(pessoaSelecionada);
@@ -83,7 +81,8 @@ class _TelaEncontrosState extends State<TelaEncontros> {
   }
 
   Future<String> getImagemUser() async {
-    final ref = FirebaseStorage.instance.ref().child('${pessoa["login"]}/img');
+    final ref =
+        FirebaseStorage.instance.ref().child('${primeiroUser["login"]}/img');
     var url = await ref.getDownloadURL();
     return url;
   }
@@ -91,7 +90,9 @@ class _TelaEncontrosState extends State<TelaEncontros> {
   void getPessoa(id) async {
     var user =
         await Operations.getData('users').where('id', isEqualTo: id).get();
-    pessoa = user.docs.first.data();
+    setState(() {
+      primeiroUser = user.docs.first.data();
+    });
   }
 
   @override
@@ -134,7 +135,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
             Center(
               child: Column(
                 children: [
-                  Text('${pessoa["nome"]}',
+                  Text('${primeiroUser["nome"]}',
                       style: const TextStyle(fontSize: 25)),
                   SizedBox(
                     child: FutureBuilder(
@@ -147,7 +148,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                             width: 300,
                             height: 250,
                             child: Image.network(snapshot.data!),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                             ),
                           ); //
@@ -241,14 +242,14 @@ class _TelaEncontrosState extends State<TelaEncontros> {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return Container(
+          return SizedBox(
             height: MediaQuery.of(context).size.height * 0.65,
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(pessoaAnterior["nome"],
+                    Text(primeiroUser["nome"],
                         style: const TextStyle(
                             fontSize: 40, fontWeight: FontWeight.bold)),
                     Text(", " + 12.toString(), //IDADECOLCA AQUI TROUXA
@@ -260,8 +261,9 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [1, 2, 3, 4, 5].map((e) {
                     String es = e.toString();
-                    var tag = jsonDecode(pessoa["interesses"]["Tag" + es]);
-                    if (pessoa["interesses"]["Tag" + es] != null) {
+                    var tag =
+                        jsonDecode(primeiroUser["interesses"]["Tag" + es]);
+                    if (primeiroUser["interesses"]["Tag" + es] != null) {
                       return Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                         child: Container(
