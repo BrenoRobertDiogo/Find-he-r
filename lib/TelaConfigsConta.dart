@@ -11,7 +11,8 @@ import 'models/Tag.dart';
 
 class TelaConfigsConta extends StatefulWidget {
   final Map<String, dynamic> pessoa;
-  const TelaConfigsConta({Key? key, required this.title, required this.pessoa}) : super(key: key);
+  const TelaConfigsConta({Key? key, required this.title, required this.pessoa})
+      : super(key: key);
   final String title;
 
   @override
@@ -25,30 +26,21 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
   void initState() {
     login = TextEditingController(text: pessoa['login']);
     nome = TextEditingController(text: pessoa['nome']);
-    TagsUser = [1,2,3,4,5].map((e) {
-      var decoded = jsonDecode( pessoa['interesses']['Tag'+e.toString()]);
+    TagsUser = [1, 2, 3, 4, 5].map((e) {
+      var decoded = jsonDecode(pessoa['interesses']['Tag' + e.toString()]);
       return TextEditingController(text: decoded['NomeTag']);
-
-
     }).toList();
-    NotasUser = [1,2,3,4,5].map((e) {
-      var decoded = jsonDecode( pessoa['interesses']['Tag'+e.toString()]);
+    NotasUser = [1, 2, 3, 4, 5].map((e) {
+      var decoded = jsonDecode(pessoa['interesses']['Tag' + e.toString()]);
       return TextEditingController(text: decoded['Estrelas'].toString());
-
-
     }).toList();
 
     getImagemUser();
-
   }
 
   Future<String> getImagemUser() async {
-    final ref = FirebaseStorage.instance.ref().child('${pessoa["login"]}/img'); // 'teste'
-// no need of the file extension, the name will do fine.
+    final ref = FirebaseStorage.instance.ref().child('${pessoa["login"]}/img');
     var url = await ref.getDownloadURL();
-    /*setState(() {
-      urlImagem = url;
-    });*/
     return url;
   }
 
@@ -56,19 +48,9 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
   TextEditingController? nome;
 
   Map<String, dynamic> USER_LOGADO_DATA = {
-    "RedesSociais": {
-      "Facebook": "",
-      "Instagram": "",
-      "Twitter": ""
-    },
+    "RedesSociais": {"Facebook": "", "Instagram": "", "Twitter": ""},
     "id": "",
-    "interesses": {
-      "Tag1": "",
-      "Tag2": "",
-      "Tag3": "",
-      "Tag4": "",
-      "Tag5": ""
-    },
+    "interesses": {"Tag1": "", "Tag2": "", "Tag3": "", "Tag4": "", "Tag5": ""},
     "login": "",
     "nome": "",
     "senha": "",
@@ -78,8 +60,8 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
   List<TextEditingController>? TagsUser;
   List<TextEditingController>? NotasUser;
   Localstore loginUser = Localstore.instance;
-  String urlImagem = "https://s2.glbimg.com/aQu7dyXnWhTmZ74IZ_jJKW5L78w=/600x400/smart/e.glbimg.com/og/ed/f/original/2022/03/28/will-smith-oscat.jpg";
-
+  String urlImagem =
+      "https://s2.glbimg.com/aQu7dyXnWhTmZ74IZ_jJKW5L78w=/600x400/smart/e.glbimg.com/og/ed/f/original/2022/03/28/will-smith-oscat.jpg";
 
   Future getUserData() async {
     final dataUser = await loginUser.collection('users').doc("user").get();
@@ -97,13 +79,15 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
   }
 
   Future<void> modoEditar() async {
-    print(pessoa);
     setState(() {
       editing = !editing;
-      for (var i in [1,2,3,4,5]) {
-        int notaUser = NotasUser![i-1].text == '' ? 0 : int.parse(NotasUser![i-1].text);
-        String tagUser = TagsUser![i-1].text;
-        USER_LOGADO_DATA['interesses']['Tag'+i.toString()] = jsonEncode(Tag(tagUser, notaUser).TagToSend());
+      for (var i in [1, 2, 3, 4, 5]) {
+        int notaUser = NotasUser![i - 1].text == ''
+            ? 0
+            : int.parse(NotasUser![i - 1].text);
+        String tagUser = TagsUser![i - 1].text;
+        USER_LOGADO_DATA['interesses']['Tag' + i.toString()] =
+            jsonEncode(Tag(tagUser, notaUser).TagToSend());
       }
       USER_LOGADO_DATA['nome'] = nome!.text;
       USER_LOGADO_DATA['login'] = login!.text;
@@ -116,26 +100,31 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
       "login": login!.text,
       "nome": nome!.text,
       "interesses": {
-        'Tag1': jsonEncode(Tag(TagsUser![0].text, int.parse(NotasUser![0].text)).TagToSend()),
-        'Tag2': jsonEncode(Tag(TagsUser![1].text, int.parse(NotasUser![1].text)).TagToSend()),
-        'Tag3': jsonEncode(Tag(TagsUser![2].text, int.parse(NotasUser![2].text)).TagToSend()),
-        'Tag4': jsonEncode(Tag(TagsUser![3].text, int.parse(NotasUser![3].text)).TagToSend()),
-        'Tag5': jsonEncode(Tag(TagsUser![4].text, int.parse(NotasUser![4].text)).TagToSend()),
-    }
+        'Tag1': jsonEncode(
+            Tag(TagsUser![0].text, int.parse(NotasUser![0].text)).TagToSend()),
+        'Tag2': jsonEncode(
+            Tag(TagsUser![1].text, int.parse(NotasUser![1].text)).TagToSend()),
+        'Tag3': jsonEncode(
+            Tag(TagsUser![2].text, int.parse(NotasUser![2].text)).TagToSend()),
+        'Tag4': jsonEncode(
+            Tag(TagsUser![3].text, int.parse(NotasUser![3].text)).TagToSend()),
+        'Tag5': jsonEncode(
+            Tag(TagsUser![4].text, int.parse(NotasUser![4].text)).TagToSend()),
+      }
     });
     setState(() {
       editing = !editing;
-
     });
   }
 
   void cancelarAlteracoes() {
     setState(() {
       editing = !editing;
-      for (var i in [1,2,3,4,5]) {
-        var decoded = jsonDecode(USER_LOGADO_DATA['interesses']['Tag'+i.toString()]);
-        NotasUser![i-1].text = decoded['Estrelas'].toString();
-        TagsUser![i-1].text = decoded['NomeTag'];
+      for (var i in [1, 2, 3, 4, 5]) {
+        var decoded =
+            jsonDecode(USER_LOGADO_DATA['interesses']['Tag' + i.toString()]);
+        NotasUser![i - 1].text = decoded['Estrelas'].toString();
+        TagsUser![i - 1].text = decoded['NomeTag'];
       }
       nome!.text = USER_LOGADO_DATA['nome'];
       login!.text = USER_LOGADO_DATA['login'];
@@ -155,42 +144,42 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
                 spacing: MediaQuery.of(context).size.height * 0.02,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: numeros.map((e) {
-                  if(jsonDecode(interesses["Tag" + e])["NomeTag"] !=
-                      "") {
+                  if (jsonDecode(interesses["Tag" + e])["NomeTag"] != "") {
                     return Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                    child: Container(
-                      color: Colors.green,
-                      width: 200,
-                      // height: 200,
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      child: Container(
+                        color: Colors.green,
+                        width: 200,
+                        // height: 200,
                         child: Column(children: [
-                            const Icon(Icons.star),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              child: TextField(
-                                controller: TagsUser![int.parse(e)-1],
-                                decoration: InputDecoration(
-                                  labelText: 'Interesse',
-                                  enabled: editing,
-                                  border: const OutlineInputBorder(),
-                                ),
+                          const Icon(Icons.star),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            child: TextField(
+                              controller: TagsUser![int.parse(e) - 1],
+                              decoration: InputDecoration(
+                                labelText: 'Interesse',
+                                enabled: editing,
+                                border: const OutlineInputBorder(),
                               ),
                             ),
-                            const  SizedBox(
-                              height: 25,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              child: TextField(
-                                controller: NotasUser![int.parse(e)-1],
-                                onChanged: (String a) =>verificaNota(a, int.parse(e)-1),
-                                decoration: InputDecoration(
-                                  labelText: 'Nota',
-                                  enabled: editing,
-                                  border: const OutlineInputBorder(),
-                                ),
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            child: TextField(
+                              controller: NotasUser![int.parse(e) - 1],
+                              onChanged: (String a) =>
+                                  verificaNota(a, int.parse(e) - 1),
+                              decoration: InputDecoration(
+                                labelText: 'Nota',
+                                enabled: editing,
+                                border: const OutlineInputBorder(),
                               ),
-                            )
+                            ),
+                          )
                         ]),
                       ),
                     );
@@ -230,21 +219,26 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
       body: Center(
         child: Column(
           children: [
-            FutureBuilder(future: getImagemUser(),
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              if(snapshot.connectionState == ConnectionState.done && snapshot.hasData){
-                return Container(width: 300,
-                  height: 250,
-                  child: Image.network(snapshot.data!),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,),
-                );//
-              }
-              if(snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData){
+            FutureBuilder(
+              future: getImagemUser(),
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData) {
+                  return Container(
+                    width: 300,
+                    height: 250,
+                    child: Image.network(snapshot.data!),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                  ); //
+                }
+                if (snapshot.connectionState == ConnectionState.waiting ||
+                    !snapshot.hasData) {
                   return const CircularProgressIndicator();
-              }
-              return Container();
-            },
+                }
+                return Container();
+              },
             ),
             const SizedBox(
               height: 16,
