@@ -53,7 +53,6 @@ class _TelaEncontrosState extends State<TelaEncontros> {
         getPessoa(pessoaSelecionada);
         cont = 1;
       } else {
-        print(this.similares.keys);
         pessoaSelecionada = this.similares.keys.elementAt(cont);
         getPessoa(pessoaSelecionada);
         cont += 1;
@@ -73,9 +72,9 @@ class _TelaEncontrosState extends State<TelaEncontros> {
         getPessoa(pessoaSelecionada);
         cont = 0;
       } else {
-        cont += 1;
         pessoaSelecionada = this.similares.keys.elementAt(cont);
         getPessoa(pessoaSelecionada);
+        cont += 1;
       }
     });
   }
