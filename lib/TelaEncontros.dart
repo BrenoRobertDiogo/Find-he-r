@@ -58,11 +58,22 @@ class _TelaEncontrosState extends State<TelaEncontros> {
         cont += 1;
       }
     });
-    this.pessoa["contatos"].add(primeiroUser);
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(pessoa["id"])
-        .update(pessoa);
+    bool contains = false;
+    for (var contato in this.pessoa["contatos"]) {
+      if (contato["id"] == primeiroUser["id"]) {
+        setState(() {
+          contains = true;
+        });
+      }
+    }
+
+    if (contains == false) {
+      this.pessoa["contatos"].add(primeiroUser);
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(pessoa["id"])
+          .update(pessoa);
+    }
   }
 
   void mudaPessoaDislike() async {
