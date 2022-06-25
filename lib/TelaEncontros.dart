@@ -251,8 +251,9 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                     Text(primeiroUser["nome"],
                         style: const TextStyle(
                             fontSize: 40, fontWeight: FontWeight.bold)),
-                    Text(", " + 12.toString(), //IDADECOLCA AQUI TROUXA
-                        style: const TextStyle(fontSize: 32)),
+                    Text(calculaIdade(primeiroUser["dataNascimento"]),
+                        style: const TextStyle(
+                            fontSize: 32, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 Wrap(
@@ -286,5 +287,23 @@ class _TelaEncontrosState extends State<TelaEncontros> {
             ),
           );
         });
+  }
+
+  String calculaIdade(birthDate) {
+    DateTime dt = (birthDate as Timestamp).toDate();
+    DateTime currentDate = DateTime.now();
+    int age = currentDate.year - dt.year;
+    int month1 = currentDate.month;
+    int month2 = dt.month;
+    if (month2 > month1) {
+      age--;
+    } else if (month1 == month2) {
+      int day1 = currentDate.day;
+      int day2 = dt.day;
+      if (day2 > day1) {
+        age--;
+      }
+    }
+    return " - Idade: $age";
   }
 }
