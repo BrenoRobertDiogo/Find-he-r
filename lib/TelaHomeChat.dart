@@ -82,7 +82,7 @@ class _TelaHomeChatState extends State<TelaHomeChat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(centerTitle: true, title: const Text('Conversas')),
+        appBar: AppBar(centerTitle: true, title: const Text('Contatos')),
         body: Column(
           children: verContatos(),
         ));
