@@ -83,9 +83,12 @@ class _TelaHomeChatState extends State<TelaHomeChat> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(centerTitle: true, title: const Text('Contatos')),
-        body: Column(
-          children: verContatos(),
-        ));
+        body: SingleChildScrollView(
+            child: Column(
+              children: verContatos(),
+            )
+        )
+        );
   }
 
   verContatos() {
@@ -141,7 +144,7 @@ class _TelaHomeChatState extends State<TelaHomeChat> {
           onPressed: () => value["RedesSociais"]["Instagram"] == ""
               ? null
               : abrirUrl(
-                  "www.instagram.com", value["RedesSociais"]["Instagram"]),
+              "www.instagram.com", value["RedesSociais"]["Instagram"]),
           icon: Icon(FontAwesomeIcons.instagram,
               color: (value["RedesSociais"]["Instagram"] == ""
                   ? Colors.grey

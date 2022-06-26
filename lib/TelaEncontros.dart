@@ -58,22 +58,11 @@ class _TelaEncontrosState extends State<TelaEncontros> {
         cont += 1;
       }
     });
-    bool contains = false;
-    for (var contato in this.pessoa["contatos"]) {
-      if (contato["id"] == primeiroUser["id"]) {
-        setState(() {
-          contains = true;
-        });
-      }
-    }
-
-    if (contains == false) {
-      this.pessoa["contatos"].add(primeiroUser);
-      FirebaseFirestore.instance
-          .collection("users")
-          .doc(pessoa["id"])
-          .update(pessoa);
-    }
+    this.pessoa["contatos"].add(primeiroUser);
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(pessoa["id"])
+        .update(pessoa);
   }
 
   void mudaPessoaDislike() async {
@@ -92,14 +81,14 @@ class _TelaEncontrosState extends State<TelaEncontros> {
 
   Future<String> getImagemUser() async {
     final ref =
-        FirebaseStorage.instance.ref().child('${primeiroUser["login"]}/img');
+    FirebaseStorage.instance.ref().child('${primeiroUser["login"]}/img');
     var url = await ref.getDownloadURL();
     return url;
   }
 
   void getPessoa(id) async {
     var user =
-        await Operations.getData('users').where('id', isEqualTo: id).get();
+    await Operations.getData('users').where('id', isEqualTo: id).get();
     setState(() {
       primeiroUser = user.docs.first.data();
     });
@@ -113,28 +102,28 @@ class _TelaEncontrosState extends State<TelaEncontros> {
           actions: [
             IconButton(
                 onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TelaConfigsConta(
-                                title: '', pessoa: this.pessoa)),
-                      )
-                    },
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TelaConfigsConta(
+                            title: '', pessoa: this.pessoa)),
+                  )
+                },
                 icon: Image.network(
                     "https://icones.pro/wp-content/uploads/2021/02/icone-utilisateur.png") // Icon.asset
 
-                ),
+            ),
             IconButton(
                 onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TelaHomeChat(
-                                  title: '',
-                                  pessoa: this.pessoa,
-                                )),
-                      )
-                    },
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TelaHomeChat(
+                          title: '',
+                          pessoa: this.pessoa,
+                        )),
+                  )
+                },
                 icon: const Icon(Icons.chat))
           ],
           centerTitle: true,
@@ -164,7 +153,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                           ); //
                         }
                         if (snapshot.connectionState ==
-                                ConnectionState.waiting ||
+                            ConnectionState.waiting ||
                             !snapshot.hasData) {
                           return const CircularProgressIndicator();
                         }
@@ -192,7 +181,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                       primary: Colors.green,
 
                       padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.height * 0.06,
+                          horizontal: MediaQuery.of(context).size.height * 0.03,
                           vertical: 20),
                       onPrimary: Colors.white,
                       shadowColor: Colors.greenAccent,
@@ -210,7 +199,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                     style: ElevatedButton.styleFrom(
                       primary: const Color.fromRGBO(000, 000, 000, 0.0),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 20),
+                          horizontal: 30, vertical: 20),
                     ),
                     icon: const Icon(
                       // <-- Icon
@@ -229,7 +218,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                       primary: Colors.red,
                       onPrimary: Colors.white,
                       padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.height * 0.06,
+                          horizontal: MediaQuery.of(context).size.height * 0.03,
                           vertical: 20),
                       shadowColor: Colors.redAccent,
                       elevation: 3,
@@ -273,7 +262,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                   children: [1, 2, 3, 4, 5].map((e) {
                     String es = e.toString();
                     var tag =
-                        jsonDecode(primeiroUser["interesses"]["Tag" + es]);
+                    jsonDecode(primeiroUser["interesses"]["Tag" + es]);
                     if (primeiroUser["interesses"]["Tag" + es] != null) {
                       return Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),

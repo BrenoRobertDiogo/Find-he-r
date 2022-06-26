@@ -154,15 +154,15 @@ class _TelaCadastroState extends State<TelaCadastro> {
       appBar: AppBar(title: const Text("Cadastro")),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image:
-                      DecorationImage(fit: BoxFit.fill, image: mostrarImg())),
-              height: MediaQuery.of(context).size.height * 0.2,
-              width: MediaQuery.of(context).size.width * 0.3,
+                  DecorationImage(fit: BoxFit.fill, image: mostrarImg())),
+              height: MediaQuery.of(context).size.height * 0.1,
+              width: MediaQuery.of(context).size.width * 0.2,
             ),
             ElevatedButton(
                 onPressed: () => selectFile(),
@@ -179,7 +179,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
               ),
             ),
             const SizedBox(
-              height: 16,
+              height: 8,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -200,21 +200,46 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     },
                   ),
                 ),
-                SizedBox(
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   width: 200,
-                  child: TextField(
-                    controller: login,
-                    decoration: const InputDecoration(
-                        labelText: 'Login',
-                        border: OutlineInputBorder(),
-                        icon: Icon(Icons.person),
-                        hintText: 'Informe seu login'),
+                  decoration: BoxDecoration(
+                      color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                  child: DropdownButton<String>(
+                    icon: const Icon(Icons.arrow_drop_down),
+                    iconSize: 42,
+                    underline: const SizedBox(),
+                    items: _valores.map((String dropDownStringItem) {
+                      return DropdownMenuItem<String>(
+                        value: dropDownStringItem,
+                        child: Text(dropDownStringItem),
+                      );
+                    }).toList(),
+                    onChanged: (String? x) => {
+                      if (x != null) {setaM(x)}
+                    },
+                    value: sexoSelecionado,
                   ),
                 ),
+
               ],
             ),
             const SizedBox(
               height: 16,
+            ),
+            SizedBox(
+              width: 400,
+              child: TextField(
+                controller: login,
+                decoration: const InputDecoration(
+                    labelText: 'Login',
+                    border: OutlineInputBorder(),
+                    icon: Icon(Icons.person),
+                    hintText: 'Informe seu login'),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
             ),
             SizedBox(
               width: 400,
@@ -229,51 +254,36 @@ class _TelaCadastroState extends State<TelaCadastro> {
               ),
             ),
             const SizedBox(
-              height: 16,
+              height: 8,
             ),
             SizedBox(
               // color: Color.fromRGBO(95, 175, 2, 0.7568627450980392),
               width: 400,
-              height: 60,
+              height: 50,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [1, 2, 3, 4, 5]
                       .map((e) => Ink(
-                            decoration: ShapeDecoration(
-                              color: dadosCadastrar["interesses"]
-                                              ["Tag" + e.toString()]
-                                          .toString() ==
-                                      jsonEncode(Tag("", 0).TagToSend())
-                                          .toString()
-                                  ? Colors.grey
-                                  : Color.fromRGBO(95, 175, 2, 1.0),
-                              shape: CircleBorder(),
-                            ),
-                            child: IconButton(
-                              icon: const Icon(Icons.star),
-                              color: Colors.white,
-                              onPressed: () {
-                                setTagSelecionada(e);
-                                modalTags();
-                              },
-                            ),
-                          ))
+                    decoration: ShapeDecoration(
+                      color: dadosCadastrar["interesses"]
+                      ["Tag" + e.toString()]
+                          .toString() ==
+                          jsonEncode(Tag("", 0).TagToSend())
+                              .toString()
+                          ? Colors.grey
+                          : const Color.fromRGBO(95, 175, 2, 1.0),
+                      shape: const CircleBorder(),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.star),
+                      color: Colors.white,
+                      onPressed: () {
+                        setTagSelecionada(e);
+                        modalTags();
+                      },
+                    ),
+                  ))
                       .toList()),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            DropdownButton<String>(
-              items: _valores.map((String dropDownStringItem) {
-                return DropdownMenuItem<String>(
-                  value: dropDownStringItem,
-                  child: Text(dropDownStringItem),
-                );
-              }).toList(),
-              onChanged: (String? x) => {
-                if (x != null) {setaM(x)}
-              },
-              value: sexoSelecionado,
             ),
             const SizedBox(
               height: 16,
@@ -396,21 +406,32 @@ class _TelaCadastroState extends State<TelaCadastro> {
                 const SizedBox(
                   height: 32,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                Wrap(
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  spacing: MediaQuery.of(context).size.height * 0.02,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+
                   children: StringsTags.map((e) {
-                    return Flexible(
-                        flex: 25,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              onChangeTag(e);
-                            },
-                            child: Text(e),
-                            style: ElevatedButton.styleFrom(
-                                primary: e == tagSelecionada
-                                    ? Colors.lightGreen
-                                    : Colors.white54)));
+                    // return Flexible(
+                    //     flex: 25,
+                    return
+                    Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+
+                        child: SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                onChangeTag(e);
+                              },
+                              child: Text(e),
+                              style: ElevatedButton.styleFrom(
+                                  primary: e == tagSelecionada
+                                      ? Colors.lightGreen
+                                      : Colors.white54)),
+                        )
+                    );
                   }).toList(),
                 ),
                 Padding(
