@@ -114,7 +114,7 @@ class _TelaLoginState extends State<TelaLogin> {
         return AlertDialog(
           title: const Text("Sobre Nós"),
           content: Text(
-              "O aplicativo aqui presente foi ministrado pelo professor André Ribeiro da Silva,referente a materia de Aplicativos Mobile.\n\nDesenvolvido pelos alunos: \nAquiles Aguiar \nBreno Robert \nCaio Roberto"),
+              "O aplicativo aqui presente foi ministrado pelo professor André Ribeiro da Silva,referente a materia de Aplicativos Mobile 2022/1 e tem como objetivo simular aplicativos de relacionamento como tinder utilizando agoritimo de distância euclidiana.\n\nDesenvolvido pelos alunos: \nAquiles Aguiar \nBreno Robert \nCaio Roberto"),
           actions: <Widget>[
             // define os botões na base do dialogo
             ElevatedButton(
