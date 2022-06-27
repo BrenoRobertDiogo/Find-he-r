@@ -2,14 +2,10 @@ export 'TelaCadastro.dart';
 
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:find_her/models/Tag.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -18,10 +14,6 @@ import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:date_field/date_field.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:find_her/TelaLogin.dart';
-import 'package:flutter/services.dart' show rootBundle;
-
-import 'Operations.dart';
 
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({Key? key, required this.title}) : super(key: key);
@@ -160,7 +152,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image:
-                  DecorationImage(fit: BoxFit.fill, image: mostrarImg())),
+                      DecorationImage(fit: BoxFit.fill, image: mostrarImg())),
               height: MediaQuery.of(context).size.height * 0.1,
               width: MediaQuery.of(context).size.width * 0.2,
             ),
@@ -201,10 +193,12 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   width: 200,
                   decoration: BoxDecoration(
-                      color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)),
                   child: DropdownButton<String>(
                     icon: const Icon(Icons.arrow_drop_down),
                     iconSize: 42,
@@ -221,7 +215,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     value: sexoSelecionado,
                   ),
                 ),
-
               ],
             ),
             const SizedBox(
@@ -264,25 +257,25 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [1, 2, 3, 4, 5]
                       .map((e) => Ink(
-                    decoration: ShapeDecoration(
-                      color: dadosCadastrar["interesses"]
-                      ["Tag" + e.toString()]
-                          .toString() ==
-                          jsonEncode(Tag("", 0).TagToSend())
-                              .toString()
-                          ? Colors.grey
-                          : const Color.fromRGBO(95, 175, 2, 1.0),
-                      shape: const CircleBorder(),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.star),
-                      color: Colors.white,
-                      onPressed: () {
-                        setTagSelecionada(e);
-                        modalTags();
-                      },
-                    ),
-                  ))
+                            decoration: ShapeDecoration(
+                              color: dadosCadastrar["interesses"]
+                                              ["Tag" + e.toString()]
+                                          .toString() ==
+                                      jsonEncode(Tag("", 0).TagToSend())
+                                          .toString()
+                                  ? Colors.grey
+                                  : const Color.fromRGBO(95, 175, 2, 1.0),
+                              shape: const CircleBorder(),
+                            ),
+                            child: IconButton(
+                              icon: const Icon(Icons.star),
+                              color: Colors.white,
+                              onPressed: () {
+                                setTagSelecionada(e);
+                                modalTags();
+                              },
+                            ),
+                          ))
                       .toList()),
             ),
             const SizedBox(
@@ -415,10 +408,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   children: StringsTags.map((e) {
                     // return Flexible(
                     //     flex: 25,
-                    return
-                    Padding(
+                    return Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-
                         child: SizedBox(
                           width: 150,
                           child: ElevatedButton(
@@ -430,8 +421,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
                                   primary: e == tagSelecionada
                                       ? Colors.lightGreen
                                       : Colors.white54)),
-                        )
-                    );
+                        ));
                   }).toList(),
                 ),
                 Padding(

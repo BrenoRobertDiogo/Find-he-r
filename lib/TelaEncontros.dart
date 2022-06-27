@@ -1,19 +1,10 @@
-import 'dart:collection';
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_her/TelaHomeChat.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:find_her/TelaConfigsConta.dart';
-import 'package:find_her/models/Pessoa.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:localstore/localstore.dart';
-import 'package:http/http.dart' as http;
 import 'package:find_her/Operations.dart';
-import 'models/Tag.dart';
 
 class TelaEncontros extends StatefulWidget {
   const TelaEncontros({
@@ -81,14 +72,14 @@ class _TelaEncontrosState extends State<TelaEncontros> {
 
   Future<String> getImagemUser() async {
     final ref =
-    FirebaseStorage.instance.ref().child('${primeiroUser["login"]}/img');
+        FirebaseStorage.instance.ref().child('${primeiroUser["login"]}/img');
     var url = await ref.getDownloadURL();
     return url;
   }
 
   void getPessoa(id) async {
     var user =
-    await Operations.getData('users').where('id', isEqualTo: id).get();
+        await Operations.getData('users').where('id', isEqualTo: id).get();
     setState(() {
       primeiroUser = user.docs.first.data();
     });
@@ -102,28 +93,28 @@ class _TelaEncontrosState extends State<TelaEncontros> {
           actions: [
             IconButton(
                 onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TelaConfigsConta(
-                            title: '', pessoa: this.pessoa)),
-                  )
-                },
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TelaConfigsConta(
+                                title: '', pessoa: this.pessoa)),
+                      )
+                    },
                 icon: Image.network(
                     "https://icones.pro/wp-content/uploads/2021/02/icone-utilisateur.png") // Icon.asset
 
-            ),
+                ),
             IconButton(
                 onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TelaHomeChat(
-                          title: '',
-                          pessoa: this.pessoa,
-                        )),
-                  )
-                },
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TelaHomeChat(
+                                  title: '',
+                                  pessoa: this.pessoa,
+                                )),
+                      )
+                    },
                 icon: const Icon(Icons.chat))
           ],
           centerTitle: true,
@@ -153,7 +144,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                           ); //
                         }
                         if (snapshot.connectionState ==
-                            ConnectionState.waiting ||
+                                ConnectionState.waiting ||
                             !snapshot.hasData) {
                           return const CircularProgressIndicator();
                         }
@@ -262,7 +253,7 @@ class _TelaEncontrosState extends State<TelaEncontros> {
                   children: [1, 2, 3, 4, 5].map((e) {
                     String es = e.toString();
                     var tag =
-                    jsonDecode(primeiroUser["interesses"]["Tag" + es]);
+                        jsonDecode(primeiroUser["interesses"]["Tag" + es]);
                     if (primeiroUser["interesses"]["Tag" + es] != null) {
                       return Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),

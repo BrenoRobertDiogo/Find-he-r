@@ -1,9 +1,6 @@
 import 'dart:convert';
-
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:localstore/localstore.dart';
 
 import 'Operations.dart';
@@ -119,65 +116,6 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
       login!.text = USER_LOGADO_DATA['login'];
     });
   }
-
-  // verInteresses() async {
-  //   final dataUser = pessoa;
-  //   Map<String, dynamic> interesses = await dataUser["interesses"];
-  //   List<String> numeros = ["1", "2", "3", "4", "5"];
-  //   showModalBottomSheet(
-  //       context: context,
-  //       builder: (context) {
-  //         return Container(
-  //             alignment: Alignment.center,
-  //             child: Wrap(
-  //               spacing: MediaQuery.of(context).size.height * 0.02,
-  //               crossAxisAlignment: WrapCrossAlignment.center,
-  //               children: numeros.map((e) {
-  //                 if (jsonDecode(interesses["Tag" + e])["NomeTag"] != "") {
-  //                   return Padding(
-  //                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-  //                     child: Container(
-  //                       color: Colors.green,
-  //                       width: 200,
-  //                       // height: 200,
-  //                       child: Column(children: [
-  //                         const Icon(Icons.star),
-  //                         SizedBox(
-  //                           width: MediaQuery.of(context).size.width * 0.3,
-  //                           child: TextField(
-  //                             controller: TagsUser![int.parse(e) - 1],
-  //                             decoration: InputDecoration(
-  //                               labelText: 'Interesse',
-  //                               enabled: editing,
-  //                               border: const OutlineInputBorder(),
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         const SizedBox(
-  //                           height: 25,
-  //                         ),
-  //                         SizedBox(
-  //                           width: MediaQuery.of(context).size.width * 0.3,
-  //                           child: TextField(
-  //                             controller: NotasUser![int.parse(e) - 1],
-  //                             onChanged: (String a) =>
-  //                                 verificaNota(a, int.parse(e) - 1),
-  //                             decoration: InputDecoration(
-  //                               labelText: 'Nota',
-  //                               enabled: editing,
-  //                               border: const OutlineInputBorder(),
-  //                             ),
-  //                           ),
-  //                         )
-  //                       ]),
-  //                     ),
-  //                   );
-  //                 }
-  //                 return const Text('');
-  //               }).toList(),
-  //             ));
-  //       });
-  // }
 
   verInteresses() async {
     final dataUser = pessoa;

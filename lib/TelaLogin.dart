@@ -1,13 +1,9 @@
 import 'package:find_her/Operations.dart';
-import 'package:find_her/models/Pessoa.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:find_her/TelaCadastro.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:io';
-import 'package:localstore/localstore.dart';
 import 'package:http/http.dart' as http;
 
 import 'TelaEncontros.dart';

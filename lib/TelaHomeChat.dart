@@ -1,10 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:uuid/uuid.dart';
-import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -85,10 +80,8 @@ class _TelaHomeChatState extends State<TelaHomeChat> {
         appBar: AppBar(centerTitle: true, title: const Text('Contatos')),
         body: SingleChildScrollView(
             child: Column(
-              children: verContatos(),
-            )
-        )
-        );
+          children: verContatos(),
+        )));
   }
 
   verContatos() {
@@ -144,7 +137,7 @@ class _TelaHomeChatState extends State<TelaHomeChat> {
           onPressed: () => value["RedesSociais"]["Instagram"] == ""
               ? null
               : abrirUrl(
-              "www.instagram.com", value["RedesSociais"]["Instagram"]),
+                  "www.instagram.com", value["RedesSociais"]["Instagram"]),
           icon: Icon(FontAwesomeIcons.instagram,
               color: (value["RedesSociais"]["Instagram"] == ""
                   ? Colors.grey
