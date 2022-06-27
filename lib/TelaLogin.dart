@@ -5,9 +5,6 @@ import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
-import 'package:ansi_styles/ansi_styles.dart';
-import 'package:ansi_styles/extension.dart';
-
 import 'TelaEncontros.dart';
 
 class TelaLogin extends StatefulWidget {
