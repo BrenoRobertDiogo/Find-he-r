@@ -24,6 +24,7 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
   _TelaConfigsContaState(this.pessoa);
   @override
   void initState() {
+    super.initState();
     login = TextEditingController(text: pessoa['login']);
     nome = TextEditingController(text: pessoa['nome']);
     TagsUser = [1, 2, 3, 4, 5].map((e) {
@@ -62,7 +63,6 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
   Localstore loginUser = Localstore.instance;
   String urlImagem =
       "https://s2.glbimg.com/aQu7dyXnWhTmZ74IZ_jJKW5L78w=/600x400/smart/e.glbimg.com/og/ed/f/original/2022/03/28/will-smith-oscat.jpg";
-
 
   bool editing = false;
 
@@ -111,7 +111,7 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
       editing = !editing;
       for (var i in [1, 2, 3, 4, 5]) {
         var decoded =
-        jsonDecode(USER_LOGADO_DATA['interesses']['Tag' + i.toString()]);
+            jsonDecode(USER_LOGADO_DATA['interesses']['Tag' + i.toString()]);
         NotasUser![i - 1].text = decoded['Estrelas'].toString();
         TagsUser![i - 1].text = decoded['NomeTag'];
       }
@@ -120,63 +120,102 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
     });
   }
 
+  // verInteresses() async {
+  //   final dataUser = pessoa;
+  //   Map<String, dynamic> interesses = await dataUser["interesses"];
+  //   List<String> numeros = ["1", "2", "3", "4", "5"];
+  //   showModalBottomSheet(
+  //       context: context,
+  //       builder: (context) {
+  //         return Container(
+  //             alignment: Alignment.center,
+  //             child: Wrap(
+  //               spacing: MediaQuery.of(context).size.height * 0.02,
+  //               crossAxisAlignment: WrapCrossAlignment.center,
+  //               children: numeros.map((e) {
+  //                 if (jsonDecode(interesses["Tag" + e])["NomeTag"] != "") {
+  //                   return Padding(
+  //                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+  //                     child: Container(
+  //                       color: Colors.green,
+  //                       width: 200,
+  //                       // height: 200,
+  //                       child: Column(children: [
+  //                         const Icon(Icons.star),
+  //                         SizedBox(
+  //                           width: MediaQuery.of(context).size.width * 0.3,
+  //                           child: TextField(
+  //                             controller: TagsUser![int.parse(e) - 1],
+  //                             decoration: InputDecoration(
+  //                               labelText: 'Interesse',
+  //                               enabled: editing,
+  //                               border: const OutlineInputBorder(),
+  //                             ),
+  //                           ),
+  //                         ),
+  //                         const SizedBox(
+  //                           height: 25,
+  //                         ),
+  //                         SizedBox(
+  //                           width: MediaQuery.of(context).size.width * 0.3,
+  //                           child: TextField(
+  //                             controller: NotasUser![int.parse(e) - 1],
+  //                             onChanged: (String a) =>
+  //                                 verificaNota(a, int.parse(e) - 1),
+  //                             decoration: InputDecoration(
+  //                               labelText: 'Nota',
+  //                               enabled: editing,
+  //                               border: const OutlineInputBorder(),
+  //                             ),
+  //                           ),
+  //                         )
+  //                       ]),
+  //                     ),
+  //                   );
+  //                 }
+  //                 return const Text('');
+  //               }).toList(),
+  //             ));
+  //       });
+  // }
+
   verInteresses() async {
-    // final dataUser = await loginUser.collection('users').doc("user").get();
     final dataUser = pessoa;
-    print(dataUser);
-    print(loginUser);
-    Map<String, dynamic> interesses = await dataUser!["interesses"];
+    Map<String, dynamic> interesses = await dataUser["interesses"];
     List<String> numeros = ["1", "2", "3", "4", "5"];
     showModalBottomSheet(
         context: context,
         builder: (context) {
           return Container(
               alignment: Alignment.center,
-              child: Wrap(
-                spacing: MediaQuery.of(context).size.height * 0.02,
-                crossAxisAlignment: WrapCrossAlignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: numeros.map((e) {
-                  if (jsonDecode(interesses["Tag" + e])["NomeTag"] != "") {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: Container(
-                        color: Colors.green,
-                        width: 200,
-                        // height: 200,
-                        child: Column(children: [
-                          const Icon(Icons.star),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: TextField(
-                              controller: TagsUser![int.parse(e) - 1],
-                              decoration: InputDecoration(
-                                labelText: 'Interesse',
-                                enabled: editing,
-                                border: const OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 25,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: TextField(
-                              controller: NotasUser![int.parse(e) - 1],
-                              onChanged: (String a) =>
-                                  verificaNota(a, int.parse(e) - 1),
-                              decoration: InputDecoration(
-                                labelText: 'Nota',
-                                enabled: editing,
-                                border: const OutlineInputBorder(),
-                              ),
-                            ),
-                          )
-                        ]),
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    child: Container(
+                      color: Colors.green,
+                      width: 200,
+                      // height: 200,
+                      child: Column(
+                        children: [
+                          if (jsonDecode(interesses["Tag" + e])["NomeTag"] !=
+                              "")
+                            const Icon(Icons.star),
+                          if (jsonDecode(interesses["Tag" + e])["NomeTag"] !=
+                              "")
+                            Text(jsonDecode(interesses["Tag" + e])["NomeTag"]),
+                          if (jsonDecode(interesses["Tag" + e])["NomeTag"] !=
+                              "")
+                            Text(
+                              jsonDecode(interesses["Tag" + e])["Estrelas"]
+                                  .toString(),
+                            )
+                        ],
                       ),
-                    );
-                  }
-                  return const Text('');
+                    ),
+                  );
                 }).toList(),
               ));
         });

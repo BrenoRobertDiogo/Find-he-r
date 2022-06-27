@@ -34,13 +34,11 @@ class _TelaLoginState extends State<TelaLogin> {
       return _exibirDialogo();
     }
     Map<String, dynamic> userId = user.docs.first.data();
-    Map<String, dynamic> similares = await getInteresses(userId["id"]);//.sort((x, y) => a);
+    Map<String, dynamic> similares =
+        await getInteresses(userId["id"]); //.sort((x, y) => a);
 
     List<Map<String, dynamic>> alinhado = similares.keys.map((String x) {
-      return {
-        "id": x,
-        "nota": similares[x]
-      };
+      return {"id": x, "nota": similares[x]};
     }).toList();
 
     alinhado.sort((x, y) {
@@ -49,14 +47,13 @@ class _TelaLoginState extends State<TelaLogin> {
 
     similares = {};
     alinhado.forEach((x) {
-       similares[x["id"]] = x["nota"];
+      similares[x["id"]] = x["nota"];
     });
-    print(alinhado);
-    print(similares);
+
     QuerySnapshot<Map<String, dynamic>> primeiroUserQuery =
-    await Operations.getData('users')
-        .where('id', isEqualTo: similares.keys.first)
-        .get();
+        await Operations.getData('users')
+            .where('id', isEqualTo: similares.keys.first)
+            .get();
 
     Map<String, dynamic> primeiroUser = primeiroUserQuery.docs.first.data();
 
@@ -64,11 +61,11 @@ class _TelaLoginState extends State<TelaLogin> {
       context,
       MaterialPageRoute(
           builder: (context) => TelaEncontros(
-            title: "",
-            pessoa: user.docs.first.data(),
-            similares: similares,
-            primeiroUser: primeiroUser,
-          )),
+                title: "",
+                pessoa: user.docs.first.data(),
+                similares: similares,
+                primeiroUser: primeiroUser,
+              )),
     );
   }
 
@@ -85,7 +82,7 @@ class _TelaLoginState extends State<TelaLogin> {
     );
 
     Map<String, dynamic> usersInteresses =
-    await jsonDecode(response.body)["similares"];
+        await jsonDecode(response.body)["similares"];
 
     return usersInteresses;
   }
@@ -100,7 +97,7 @@ class _TelaLoginState extends State<TelaLogin> {
         return AlertDialog(
           title: const Text("Login error"),
           content:
-          const Text("Login ou senha estão errados, tente novamente !"),
+              const Text("Login ou senha estão errados, tente novamente !"),
           actions: <Widget>[
             // define os botões na base do dialogo
             ElevatedButton(
@@ -159,15 +156,15 @@ class _TelaLoginState extends State<TelaLogin> {
                 child: const Text('Logar'),
                 style: ElevatedButton.styleFrom(fixedSize: const Size(400, 50)),
                 onPressed: logar //() {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => const TelaEncontros(
-              //               title: '',
-              //             )),
-              //   );
-              // },
-            ),
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => const TelaEncontros(
+                //               title: '',
+                //             )),
+                //   );
+                // },
+                ),
             const SizedBox(
               height: 16,
             ),
@@ -179,8 +176,8 @@ class _TelaLoginState extends State<TelaLogin> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const TelaCadastro(
-                        title: '',
-                      )),
+                            title: '',
+                          )),
                 );
               },
             ),
