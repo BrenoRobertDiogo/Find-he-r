@@ -5,6 +5,8 @@ import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
+import 'package:ansi_styles/ansi_styles.dart';
+import 'package:ansi_styles/extension.dart';
 
 import 'TelaEncontros.dart';
 
@@ -108,10 +110,38 @@ class _TelaLoginState extends State<TelaLogin> {
     );
   }
 
+  void sobreNos() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Sobre Nós"),
+          content: Text(
+              "O aplicativo aqui presente foi ministrado pelo professor André Ribeiro da Silva,referente a materia de Aplicativos Mobile.\n\nDesenvolvido pelos alunos: \nAquiles Aguiar \nBreno Robert \nCaio Roberto"),
+          actions: <Widget>[
+            // define os botões na base do dialogo
+            ElevatedButton(
+              child: const Text("Fechar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Findher")),
+      appBar: AppBar(
+        title: const Text("Findher"),
+        actions: [
+          IconButton(onPressed: sobreNos, icon: Icon(Icons.info) // Icon.asset
+              )
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -151,16 +181,7 @@ class _TelaLoginState extends State<TelaLogin> {
             ElevatedButton(
                 child: const Text('Logar'),
                 style: ElevatedButton.styleFrom(fixedSize: const Size(400, 50)),
-                onPressed: logar //() {
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => const TelaEncontros(
-                //               title: '',
-                //             )),
-                //   );
-                // },
-                ),
+                onPressed: logar),
             const SizedBox(
               height: 16,
             ),
@@ -176,7 +197,7 @@ class _TelaLoginState extends State<TelaLogin> {
                           )),
                 );
               },
-            ),
+            )
           ],
         ),
       ),

@@ -64,7 +64,6 @@ class _TelaConfigsContaState extends State<TelaConfigsConta> {
   bool editing = false;
 
   Future<void> modoEditar() async {
-    print(NotasUser!);
     setState(() {
       editing = !editing;
       for (var i in [1, 2, 3, 4, 5]) {
